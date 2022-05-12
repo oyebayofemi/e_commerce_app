@@ -1,3 +1,4 @@
+import 'package:e_commerce_app/screens/detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -46,44 +47,54 @@ Widget featuredProduct(
     required String url,
     required bool isListProduct,
     required BuildContext context}) {
-  return Card(
-    child: Container(
-      height: isListProduct
-          ? MediaQuery.of(context).size.height - 675
-          : MediaQuery.of(context).size.height - 580,
-      // height: 100,
-      width: MediaQuery.of(context).size.width - 220,
-      // width: 200,
-      // color: Colors.red,
-      child: Column(
-        children: [
-          Container(
-              height: isListProduct
-                  ? MediaQuery.of(context).size.height - 675
-                  : MediaQuery.of(context).size.height - 631,
-              width: double.maxFinite,
-              margin: EdgeInsets.fromLTRB(10, 5, 10, 0),
-              // color: Colors.blueGrey,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                    fit: BoxFit.fill,
-                    image: AssetImage(
-                      'assets/$url',
-                    )),
-              )),
-          SizedBox(
-            height: 20.h,
-          ),
-          Column(
-            children: [
-              Text(
-                '\$ $amount',
-                style: TextStyle(color: Colors.grey[500]),
-              ),
-              Text('$name')
-            ],
-          )
-        ],
+  return GestureDetector(
+    onTap: () {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                DetailPage(amount: amount, name: name, url: url),
+          ));
+    },
+    child: Card(
+      child: Container(
+        height: isListProduct
+            ? MediaQuery.of(context).size.height - 675
+            : MediaQuery.of(context).size.height - 580,
+        // height: 100,
+        width: MediaQuery.of(context).size.width - 220,
+        // width: 200,
+        // color: Colors.red,
+        child: Column(
+          children: [
+            Container(
+                height: isListProduct
+                    ? MediaQuery.of(context).size.height - 675
+                    : MediaQuery.of(context).size.height - 631,
+                width: double.maxFinite,
+                margin: EdgeInsets.fromLTRB(10, 5, 10, 0),
+                // color: Colors.blueGrey,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                      fit: BoxFit.fill,
+                      image: AssetImage(
+                        'assets/$url',
+                      )),
+                )),
+            SizedBox(
+              height: 20.h,
+            ),
+            Column(
+              children: [
+                Text(
+                  '\$ $amount',
+                  style: TextStyle(color: Colors.grey[500]),
+                ),
+                Text('$name')
+              ],
+            )
+          ],
+        ),
       ),
     ),
   );
@@ -109,4 +120,22 @@ Widget carouselBuild(AssetImage urlImage, int index) {
       decoration: BoxDecoration(
         image: DecorationImage(fit: BoxFit.contain, image: urlImage),
       ));
+}
+
+Container sizeProduct(BuildContext context, String name) {
+  return Container(
+    height: MediaQuery.of(context).size.height - 750,
+    width: MediaQuery.of(context).size.width - 340,
+    color: Colors.grey.shade300,
+    child: Center(child: Text('$name')),
+  );
+}
+
+Container colorProduct(BuildContext context, Color color) {
+  return Container(
+    height: MediaQuery.of(context).size.height - 750,
+    width: MediaQuery.of(context).size.width - 340,
+    color: color,
+    // child: Center(child: Text('$name')),
+  );
 }
