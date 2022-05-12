@@ -1,9 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:e_commerce_app/providers/user_provider.dart';
 import 'package:e_commerce_app/screens/list_product.dart';
 import 'package:e_commerce_app/services.dart/authService.dart';
 import 'package:e_commerce_app/shared/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -20,8 +22,18 @@ class _HomePageState extends State<HomePage> {
     AssetImage('assets/bed.jpg'),
     AssetImage('assets/shirt.jpg'),
   ];
+  bool homeColor = true;
+  bool contactColor = false;
+
+  bool aboutColor = false;
+  bool cartColor = false;
+
   @override
   Widget build(BuildContext context) {
+    UserProvider userProvider = Provider.of(context);
+    userProvider.getUserData();
+
+    var userData = userProvider.currentUserData;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -197,7 +209,68 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-      drawer: Drawer(),
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            userData?.name == null
+                ? load()
+                : UserAccountsDrawerHeader(
+                    accountName: Text(
+                      userData!.name!,
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    accountEmail: Text(
+                      userData.email!,
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    currentAccountPicture: CircleAvatar(
+                        backgroundImage:
+                            AssetImage('assets/account_image.png')),
+                  ),
+            ListTile(
+                onTap: () {
+                  homeColor = true;
+                  aboutColor = false;
+                  cartColor = false;
+                  contactColor = false;
+                },
+                selected: homeColor,
+                leading: Icon(Icons.home),
+                title: Text('Home')),
+            ListTile(
+                onTap: () {
+                  homeColor = false;
+                  aboutColor = false;
+                  cartColor = true;
+                  contactColor = false;
+                },
+                selected: cartColor,
+                leading: Icon(Icons.shopping_cart),
+                title: Text('Cart')),
+            ListTile(
+                onTap: () {
+                  homeColor = false;
+                  aboutColor = true;
+                  cartColor = false;
+                  contactColor = false;
+                },
+                selected: aboutColor,
+                leading: Icon(Icons.info),
+                title: Text('About')),
+            ListTile(
+                onTap: () {
+                  homeColor = false;
+                  aboutColor = false;
+                  cartColor = false;
+                  contactColor = true;
+                },
+                selected: contactColor,
+                leading: Icon(Icons.phone),
+                title: Text('Contact US')),
+            ListTile(leading: Icon(Icons.logout), title: Text('Logout')),
+          ],
+        ),
+      ),
     );
   }
 }

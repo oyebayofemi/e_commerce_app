@@ -1,4 +1,5 @@
 import 'package:e_commerce_app/model/userModel.dart';
+import 'package:e_commerce_app/providers/user_provider.dart';
 import 'package:e_commerce_app/services.dart/authService.dart';
 import 'package:e_commerce_app/wrapper.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -26,6 +27,9 @@ class ECommerceApp extends StatelessWidget {
           catchError: (User, UserModel) => null,
           create: (context) => context.read<AuthService>().onAuthStateChanged,
           initialData: null,
+        ),
+        ChangeNotifierProvider<UserProvider>(
+          create: (context) => UserProvider(),
         ),
       ],
       child: ScreenUtilInit(
