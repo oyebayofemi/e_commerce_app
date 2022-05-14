@@ -17,6 +17,8 @@ class _ListProductState extends State<ListProduct> {
     ListProductData('5000.00', 'A Full Clipper Set', 'clipper.jpeg'),
     ListProductData('5000.00', 'FIFA 21', 'fifa.jpg'),
     ListProductData('5000.00', 'Ipone 11', 'iphone.jpeg'),
+    ListProductData('5000.00', 'Ipone 11', 'iphone.jpeg'),
+    ListProductData('5000.00', 'Ipone 11', 'iphone.jpeg'),
   ];
   @override
   Widget build(BuildContext context) {

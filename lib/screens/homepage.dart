@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:e_commerce_app/providers/user_provider.dart';
+import 'package:e_commerce_app/screens/cartpage.dart';
 import 'package:e_commerce_app/screens/list_product.dart';
 import 'package:e_commerce_app/services.dart/authService.dart';
 import 'package:e_commerce_app/shared/widget.dart';
@@ -53,7 +54,7 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             children: [
               Container(
-                height: MediaQuery.of(context).size.height - 610,
+                height: MediaQuery.of(context).size.height - 1610.h,
                 // color: Colors.blue,
                 child: CarouselSlider.builder(
                     itemCount: images.length,
@@ -68,7 +69,7 @@ class _HomePageState extends State<HomePage> {
               ),
               Container(
                 // color: Colors.blue,
-                height: MediaQuery.of(context).size.height - 750,
+                height: MediaQuery.of(context).size.height - 2150.h,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -94,7 +95,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               Container(
-                height: MediaQuery.of(context).size.height - 760,
+                height: MediaQuery.of(context).size.height - 2190.h,
                 // color: Colors.blue,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -150,7 +151,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               Container(
-                height: MediaQuery.of(context).size.height - 770,
+                height: MediaQuery.of(context).size.height - 2200.h,
                 // color: Colors.blue,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -243,6 +244,11 @@ class _HomePageState extends State<HomePage> {
                   aboutColor = false;
                   cartColor = true;
                   contactColor = false;
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //       builder: (context) => CartPage(),
+                  //     ));
                 },
                 selected: cartColor,
                 leading: Icon(Icons.shopping_cart),

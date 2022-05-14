@@ -1,3 +1,4 @@
+import 'package:e_commerce_app/screens/cartpage.dart';
 import 'package:e_commerce_app/shared/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -30,7 +31,7 @@ class _DetailPageState extends State<DetailPage> {
             children: [
               Container(
                   // color: Colors.blue,
-                  height: MediaQuery.of(context).size.height - 600,
+                  height: 700.h,
                   decoration: BoxDecoration(
                     image: DecorationImage(
                         fit: BoxFit.contain,
@@ -85,7 +86,7 @@ class _DetailPageState extends State<DetailPage> {
                 height: 20.h,
               ),
               Container(
-                width: MediaQuery.of(context).size.width - 100,
+                width: MediaQuery.of(context).size.width - 190.w,
                 // color: Colors.blue,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -109,7 +110,7 @@ class _DetailPageState extends State<DetailPage> {
                 height: 20.h,
               ),
               Container(
-                width: MediaQuery.of(context).size.width - 100,
+                width: MediaQuery.of(context).size.width - 220.w,
                 // color: Colors.blue,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -133,7 +134,7 @@ class _DetailPageState extends State<DetailPage> {
                 height: 20.h,
               ),
               Container(
-                width: MediaQuery.of(context).size.width - 100,
+                width: MediaQuery.of(context).size.width - 220.w,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -177,7 +178,16 @@ class _DetailPageState extends State<DetailPage> {
                 //     borderRadius: BorderRadius.all(Radius.circular(70.r))),
                 child: FlatButton(
                   color: Colors.orange,
-                  onPressed: () async {},
+                  onPressed: () async {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CartPage(
+                              amount: widget.amount,
+                              name: widget.name,
+                              url: widget.url),
+                        ));
+                  },
                   child: Text(
                     'CHECK OUT',
                     style: TextStyle(

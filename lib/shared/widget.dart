@@ -59,18 +59,18 @@ Widget featuredProduct(
     child: Card(
       child: Container(
         height: isListProduct
-            ? MediaQuery.of(context).size.height - 675
-            : MediaQuery.of(context).size.height - 580,
+            ? MediaQuery.of(context).size.height - 1800.h
+            : MediaQuery.of(context).size.height - 1680.h,
         // height: 100,
-        width: MediaQuery.of(context).size.width - 220,
+        width: MediaQuery.of(context).size.width - 620.w,
         // width: 200,
         // color: Colors.red,
         child: Column(
           children: [
             Container(
                 height: isListProduct
-                    ? MediaQuery.of(context).size.height - 675
-                    : MediaQuery.of(context).size.height - 631,
+                    ? MediaQuery.of(context).size.height - 1980.h
+                    : MediaQuery.of(context).size.height - 1831.h,
                 width: double.maxFinite,
                 margin: EdgeInsets.fromLTRB(10, 5, 10, 0),
                 // color: Colors.blueGrey,
@@ -124,8 +124,8 @@ Widget carouselBuild(AssetImage urlImage, int index) {
 
 Container sizeProduct(BuildContext context, String name) {
   return Container(
-    height: MediaQuery.of(context).size.height - 750,
-    width: MediaQuery.of(context).size.width - 340,
+    height: MediaQuery.of(context).size.height - 2180.h,
+    width: MediaQuery.of(context).size.width - 930.w,
     color: Colors.grey.shade300,
     child: Center(child: Text('$name')),
   );
@@ -133,8 +133,8 @@ Container sizeProduct(BuildContext context, String name) {
 
 Container colorProduct(BuildContext context, Color color) {
   return Container(
-    height: MediaQuery.of(context).size.height - 750,
-    width: MediaQuery.of(context).size.width - 340,
+    height: MediaQuery.of(context).size.height - 2230.h,
+    width: MediaQuery.of(context).size.width - 960.w,
     color: color,
     // child: Center(child: Text('$name')),
   );
