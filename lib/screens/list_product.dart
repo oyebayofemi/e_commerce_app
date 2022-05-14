@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:e_commerce_app/model/product.dart';
 import 'package:e_commerce_app/shared/widget.dart';
 import 'package:flutter/material.dart';
 
@@ -10,16 +12,16 @@ class ListProduct extends StatefulWidget {
 }
 
 class _ListProductState extends State<ListProduct> {
-  final List<ListProductData> menu = [
-    ListProductData('5000.00', 'Belt', 'jeans.jpg'),
-    ListProductData('12,000.00', 'King size Bed', 'bed.jpg'),
-    ListProductData('5000.00', 'Bluetooth Headphones', 'bluetooth.jpg'),
-    ListProductData('5000.00', 'A Full Clipper Set', 'clipper.jpeg'),
-    ListProductData('5000.00', 'FIFA 21', 'fifa.jpg'),
-    ListProductData('5000.00', 'Ipone 11', 'iphone.jpeg'),
-    ListProductData('5000.00', 'Ipone 11', 'iphone.jpeg'),
-    ListProductData('5000.00', 'Ipone 11', 'iphone.jpeg'),
-  ];
+  CollectionReference featuredProductData = FirebaseFirestore.instance
+      .collection('products')
+      .doc('hLWQUcBxUXPezSJEctw6')
+      .collection('featuredProducts');
+
+  CollectionReference achivesProductData = FirebaseFirestore.instance
+      .collection('products')
+      .doc('hLWQUcBxUXPezSJEctw6')
+      .collection('achivesProduct');
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,24 +47,72 @@ class _ListProductState extends State<ListProduct> {
               ],
             ),
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 05),
-              // color: Colors.blue,
-              height: MediaQuery.of(context).size.height - 122,
-              child: GridView.builder(
-                  itemCount: menu.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 4.0,
-                      mainAxisSpacing: 4.0),
-                  itemBuilder: (context, index) {
-                    return featuredProduct(
-                        amount: menu[index].amount,
-                        name: menu[index].name,
-                        url: menu[index].url,
-                        isListProduct: true,
-                        context: context);
-                  }),
-            )
+                margin: EdgeInsets.symmetric(horizontal: 05),
+                // color: Colors.blue,
+                height: MediaQuery.of(context).size.height - 122,
+                child: widget.name == 'Achives'
+                    ? StreamBuilder<QuerySnapshot>(
+                        stream: achivesProductData.snapshots(),
+                        builder:
+                            (context, AsyncSnapshot<QuerySnapshot?> snapshot) {
+                          if (snapshot.hasData) {
+                            return GridView.builder(
+                                itemCount: snapshot.data!.docs.length,
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2,
+                                        crossAxisSpacing: 4.0,
+                                        mainAxisSpacing: 4.0),
+                                itemBuilder: (context, index) {
+                                  DocumentSnapshot dsnapshot =
+                                      snapshot.data!.docs[index];
+
+                                  var data = Product(
+                                      amount: dsnapshot['amount'],
+                                      name: dsnapshot['name'],
+                                      url: dsnapshot['url']);
+                                  return featuredProduct(
+                                      amount: '${data.amount}',
+                                      name: data.name,
+                                      url: data.url,
+                                      isListProduct: true,
+                                      context: context);
+                                });
+                          } else {
+                            return load();
+                          }
+                        })
+                    : StreamBuilder<QuerySnapshot>(
+                        stream: featuredProductData.snapshots(),
+                        builder:
+                            (context, AsyncSnapshot<QuerySnapshot?> snapshot) {
+                          if (snapshot.hasData) {
+                            return GridView.builder(
+                                itemCount: snapshot.data!.docs.length,
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2,
+                                        crossAxisSpacing: 4.0,
+                                        mainAxisSpacing: 4.0),
+                                itemBuilder: (context, index) {
+                                  DocumentSnapshot dsnapshot =
+                                      snapshot.data!.docs[index];
+
+                                  var data = Product(
+                                      amount: dsnapshot['amount'],
+                                      name: dsnapshot['name'],
+                                      url: dsnapshot['url']);
+                                  return featuredProduct(
+                                      amount: '${data.amount}',
+                                      name: data.name,
+                                      url: data.url,
+                                      isListProduct: true,
+                                      context: context);
+                                });
+                          } else {
+                            return load();
+                          }
+                        }))
           ],
         ),
       ),

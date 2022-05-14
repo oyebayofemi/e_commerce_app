@@ -60,7 +60,7 @@ Widget featuredProduct(
       child: Container(
         height: isListProduct
             ? MediaQuery.of(context).size.height - 1800.h
-            : MediaQuery.of(context).size.height - 1680.h,
+            : MediaQuery.of(context).size.height - 1670.h,
         // height: 100,
         width: MediaQuery.of(context).size.width - 620.w,
         // width: 200,
@@ -76,10 +76,7 @@ Widget featuredProduct(
                 // color: Colors.blueGrey,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                      fit: BoxFit.fill,
-                      image: AssetImage(
-                        'assets/$url',
-                      )),
+                      fit: BoxFit.fill, image: NetworkImage(url)),
                 )),
             SizedBox(
               height: 20.h,
@@ -90,7 +87,14 @@ Widget featuredProduct(
                   '\$ $amount',
                   style: TextStyle(color: Colors.grey[500]),
                 ),
-                Text('$name')
+                Wrap(
+                  children: [
+                    Text(
+                      '$name',
+                      overflow: TextOverflow.ellipsis,
+                    )
+                  ],
+                )
               ],
             )
           ],

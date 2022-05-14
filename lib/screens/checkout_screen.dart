@@ -18,42 +18,44 @@ class _CheckoutPageState extends State<CheckoutPage> {
         title: Text('Checkout Page'),
         centerTitle: true,
       ),
-      body: Container(
-        // color: Colors.blue,
-        child: Column(
-          children: [
-            Container(
-              height: MediaQuery.of(context).size.height - 940.h,
-              // color: Colors.green,
-              child: ListView(
-                children: [
-                  cartListProduct(context),
-                  cartListProduct(context),
-                  cartListProduct(context),
-                  cartListProduct(context),
-                  cartListProduct(context),
-                  cartListProduct(context),
-                  cartListProduct(context),
-                  cartListProduct(context),
-                  cartListProduct(context),
-                ],
+      body: SingleChildScrollView(
+        child: Container(
+          // color: Colors.blue,
+          child: Column(
+            children: [
+              Container(
+                height: MediaQuery.of(context).size.height - 940.h,
+                // color: Colors.green,
+                child: ListView(
+                  children: [
+                    cartListProduct(context),
+                    cartListProduct(context),
+                    cartListProduct(context),
+                    cartListProduct(context),
+                    cartListProduct(context),
+                    cartListProduct(context),
+                    cartListProduct(context),
+                    cartListProduct(context),
+                    cartListProduct(context),
+                  ],
+                ),
               ),
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 10),
-              // color: Colors.red,
-              height: MediaQuery.of(context).size.height - 1900.h,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  checkoutConstant('Your Price', '60.00', false, false),
-                  checkoutConstant('Discount', '6', false, true),
-                  checkoutConstant('Shipping', '60.00', false, false),
-                  checkoutConstant('Total', '60.00', true, false),
-                ],
+              Container(
+                margin: EdgeInsets.only(top: 10),
+                // color: Colors.red,
+                height: MediaQuery.of(context).size.height - 1900.h,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    checkoutConstant('Your Price', '60.00', false, false),
+                    checkoutConstant('Discount', '6', false, true),
+                    checkoutConstant('Shipping', '60.00', false, false),
+                    checkoutConstant('Total', '60.00', true, false),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: GestureDetector(

@@ -1,4 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:e_commerce_app/model/product.dart';
 import 'package:e_commerce_app/providers/user_provider.dart';
 import 'package:e_commerce_app/screens/cartpage.dart';
 import 'package:e_commerce_app/screens/list_product.dart';
@@ -16,6 +18,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  CollectionReference featuredProductData = FirebaseFirestore.instance
+      .collection('products')
+      .doc('hLWQUcBxUXPezSJEctw6')
+      .collection('featuredProducts');
+
+  CollectionReference achivesProductData = FirebaseFirestore.instance
+      .collection('products')
+      .doc('hLWQUcBxUXPezSJEctw6')
+      .collection('achivesProduct');
+
   final images = [
     AssetImage('assets/fifa.jpg'),
     AssetImage('assets/bluetooth.jpg'),
@@ -129,26 +141,45 @@ class _HomePageState extends State<HomePage> {
               SizedBox(
                 height: 20.h,
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10.w),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    featuredProduct(
-                        amount: '30.00',
-                        name: 'Mens Jeans',
-                        url: 'jeans.jpg',
-                        isListProduct: false,
-                        context: context),
-                    featuredProduct(
-                        amount: '50.00',
-                        name: 'Mens Shirts',
-                        url: 'shirt.jpg',
-                        isListProduct: false,
-                        context: context),
-                  ],
-                ),
+              FutureBuilder(
+                future: featuredProductData.get(),
+                builder: ((context, AsyncSnapshot snapshot) {
+                  if (snapshot.hasData) {
+                    var firstData = Product(
+                        amount: snapshot.data.docs[0]['amount'],
+                        name: snapshot.data.docs[0]['name'],
+                        url: snapshot.data.docs[0]['url']);
+
+                    var secondData = Product(
+                        amount: snapshot.data.docs[1]['amount'],
+                        name: snapshot.data.docs[1]['name'],
+                        url: snapshot.data.docs[2]['url']);
+
+                    return Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10.w),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          featuredProduct(
+                              amount: '${firstData.amount}',
+                              name: firstData.name,
+                              url: firstData.url,
+                              isListProduct: false,
+                              context: context),
+                          featuredProduct(
+                              amount: '${secondData.amount}',
+                              name: secondData.name,
+                              url: secondData.url,
+                              isListProduct: false,
+                              context: context),
+                        ],
+                      ),
+                    );
+                  } else {
+                    return load();
+                  }
+                }),
               ),
               Container(
                 height: MediaQuery.of(context).size.height - 2200.h,
@@ -160,7 +191,7 @@ class _HomePageState extends State<HomePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Achives',
+                          'New Achives',
                           style: featuredText(),
                         ),
                         GestureDetector(
@@ -185,26 +216,45 @@ class _HomePageState extends State<HomePage> {
               SizedBox(
                 height: 20.h,
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10.w),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    featuredProduct(
-                        amount: '3000.00',
-                        name: 'A Man Watch',
-                        url: 'men_watch.jpeg',
-                        isListProduct: false,
-                        context: context),
-                    featuredProduct(
-                        amount: '500.00',
-                        name: 'Mens Trousers',
-                        url: 'men trousers.jpg',
-                        isListProduct: false,
-                        context: context),
-                  ],
-                ),
+              FutureBuilder(
+                future: achivesProductData.get(),
+                builder: ((context, AsyncSnapshot snapshot) {
+                  if (snapshot.hasData) {
+                    var firstData = Product(
+                        amount: snapshot.data.docs[0]['amount'],
+                        name: snapshot.data.docs[0]['name'],
+                        url: snapshot.data.docs[0]['url']);
+
+                    var secondData = Product(
+                        amount: snapshot.data.docs[1]['amount'],
+                        name: snapshot.data.docs[1]['name'],
+                        url: snapshot.data.docs[2]['url']);
+
+                    return Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10.w),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          featuredProduct(
+                              amount: '${firstData.amount}',
+                              name: firstData.name,
+                              url: firstData.url,
+                              isListProduct: false,
+                              context: context),
+                          featuredProduct(
+                              amount: '${secondData.amount}',
+                              name: secondData.name,
+                              url: secondData.url,
+                              isListProduct: false,
+                              context: context),
+                        ],
+                      ),
+                    );
+                  } else {
+                    return load();
+                  }
+                }),
               ),
             ],
           ),
