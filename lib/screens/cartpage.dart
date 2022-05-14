@@ -1,3 +1,4 @@
+import 'package:e_commerce_app/screens/checkout_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -25,18 +26,28 @@ class _CartPageState extends State<CartPage> {
           IconButton(onPressed: () {}, icon: Icon(Icons.notifications_none)),
         ],
       ),
-      bottomNavigationBar: Container(
-          margin: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-          height: MediaQuery.of(context).size.height - 2150.h,
-          color: Colors.orange,
-          child: Center(
-            child: Text(
-              'CONTINUE',
-              style: TextStyle(
-                color: Colors.white,
+      bottomNavigationBar: GestureDetector(
+        onTap: () {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CheckoutPage(),
+              ));
+        },
+        child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            height: MediaQuery.of(context).size.height - 2150.h,
+            color: Colors.orange,
+            child: Center(
+              child: Text(
+                'CONTINUE',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-          )),
+            )),
+      ),
       body: Container(
           // color: Colors.blue,
           child: ListView(

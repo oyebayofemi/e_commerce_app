@@ -139,3 +139,17 @@ Container colorProduct(BuildContext context, Color color) {
     // child: Center(child: Text('$name')),
   );
 }
+
+TextStyle checkoutTitleText() {
+  return TextStyle(
+    fontSize: 60.sp,
+    // fontWeight: FontWeight.bold,
+  );
+}
+
+TextStyle checkoutTotalText() {
+  return TextStyle(
+    fontSize: 60.sp,
+    fontWeight: FontWeight.bold,
+  );
+}
