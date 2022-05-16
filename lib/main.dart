@@ -1,4 +1,6 @@
 import 'package:e_commerce_app/model/userModel.dart';
+import 'package:e_commerce_app/providers/category_provider.dart';
+import 'package:e_commerce_app/providers/product_provider.dart';
 import 'package:e_commerce_app/providers/user_provider.dart';
 import 'package:e_commerce_app/services.dart/authService.dart';
 import 'package:e_commerce_app/wrapper.dart';
@@ -30,6 +32,12 @@ class ECommerceApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<UserProvider>(
           create: (context) => UserProvider(),
+        ),
+        ChangeNotifierProvider<ProductProvider>(
+          create: (context) => ProductProvider(),
+        ),
+        ChangeNotifierProvider<CategoryProvider>(
+          create: (context) => CategoryProvider(),
         ),
       ],
       child: ScreenUtilInit(

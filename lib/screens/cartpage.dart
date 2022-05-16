@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class CartPage extends StatefulWidget {
   String url;
   String name;
-  String amount;
+  int amount;
   CartPage({required this.url, required this.amount, required this.name});
 
   @override
@@ -70,7 +70,7 @@ class _CartPageState extends State<CartPage> {
   }
 
   Container cartListProduct(
-      BuildContext context, String url, String name, String amount) {
+      BuildContext context, String url, String name, int amount) {
     return Container(
       height: MediaQuery.of(context).size.height - 1910.h,
       child: Card(
@@ -85,8 +85,8 @@ class _CartPageState extends State<CartPage> {
                   decoration: BoxDecoration(
                     image: DecorationImage(
                         fit: BoxFit.contain,
-                        image: AssetImage(
-                          'assets/${url}',
+                        image: NetworkImage(
+                          url,
                         )),
                   ),
                   // child: Text('s'),

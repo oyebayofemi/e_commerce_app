@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DetailPage extends StatefulWidget {
-  String amount;
+  int amount;
   String url;
   String name;
 
@@ -34,10 +34,7 @@ class _DetailPageState extends State<DetailPage> {
                   height: 700.h,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                        fit: BoxFit.contain,
-                        image: AssetImage(
-                          'assets/${widget.url}',
-                        )),
+                        fit: BoxFit.contain, image: NetworkImage(widget.url)),
                   )),
               SizedBox(
                 height: 70.h,

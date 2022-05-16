@@ -1,4 +1,5 @@
 import 'package:e_commerce_app/screens/detail_screen.dart';
+import 'package:e_commerce_app/screens/list_product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -42,10 +43,9 @@ TextStyle featuredText() {
 }
 
 Widget featuredProduct(
-    {required String amount,
+    {required int amount,
     required String name,
     required String url,
-    required bool isListProduct,
     required BuildContext context}) {
   return GestureDetector(
     onTap: () {
@@ -58,19 +58,15 @@ Widget featuredProduct(
     },
     child: Card(
       child: Container(
-        height: isListProduct
-            ? MediaQuery.of(context).size.height - 1800.h
-            : MediaQuery.of(context).size.height - 1670.h,
+        height: MediaQuery.of(context).size.height - 1670.h,
         // height: 100,
-        width: MediaQuery.of(context).size.width - 620.w,
+        width: MediaQuery.of(context).size.width - 600.w,
         // width: 200,
         // color: Colors.red,
         child: Column(
           children: [
             Container(
-                height: isListProduct
-                    ? MediaQuery.of(context).size.height - 1980.h
-                    : MediaQuery.of(context).size.height - 1831.h,
+                height: MediaQuery.of(context).size.height - 1831.h,
                 width: double.maxFinite,
                 margin: EdgeInsets.fromLTRB(10, 5, 10, 0),
                 // color: Colors.blueGrey,
@@ -104,15 +100,87 @@ Widget featuredProduct(
   );
 }
 
-CircleAvatar homeCircleAvatar(Color color, String url) {
-  return CircleAvatar(
-    backgroundColor: color,
-    radius: 100.r,
-    child: Container(
-      height: 130.h,
-      child: Image(
+Widget listProduct(
+    {required int amount,
+    required String name,
+    required String url,
+    required BuildContext context}) {
+  return GestureDetector(
+    onTap: () {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                DetailPage(amount: amount, name: name, url: url),
+          ));
+    },
+    child: Card(
+      child: Container(
+        height: MediaQuery.of(context).size.height - 700.h,
+        // height: 100,
+        width: MediaQuery.of(context).size.width - 620.w,
+        // width: 200,
         // color: Colors.red,
-        image: AssetImage('assets/home_circle_avatar/$url'),
+        child: Column(
+          children: [
+            Container(
+                height: MediaQuery.of(context).size.height - 1980.h,
+                width: double.maxFinite,
+                margin: EdgeInsets.fromLTRB(10, 5, 10, 0),
+                // color: Colors.blueGrey,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                      fit: BoxFit.fill, image: NetworkImage(url)),
+                )),
+            SizedBox(
+              height: 20.h,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: Column(
+                children: [
+                  Text(
+                    '\$ $amount',
+                    style: TextStyle(color: Colors.grey[500]),
+                  ),
+                  Wrap(
+                    children: [
+                      Text(
+                        '$name',
+                        overflow: TextOverflow.ellipsis,
+                      )
+                    ],
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
+Widget homeCircleAvatar(
+    Color color, String url, String name, var snapshot, BuildContext context) {
+  // var name;
+  return GestureDetector(
+    onTap: () {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ListProduct(name: name, snapshot: snapshot),
+          ));
+    },
+    child: CircleAvatar(
+      backgroundColor: color,
+      radius: 100.r,
+      child: Container(
+        height: 130.h,
+        child: Image(
+          // color: Colors.red,
+          image: AssetImage('assets/home_circle_avatar/$url'),
+        ),
       ),
     ),
   );

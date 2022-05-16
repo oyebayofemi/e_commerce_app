@@ -5,23 +5,14 @@ import 'package:flutter/material.dart';
 
 class ListProduct extends StatefulWidget {
   String name;
-  ListProduct({required this.name});
+  final List<Product> snapshot;
+  ListProduct({required this.name, required this.snapshot});
 
   @override
   State<ListProduct> createState() => _ListProductState();
 }
 
 class _ListProductState extends State<ListProduct> {
-  CollectionReference featuredProductData = FirebaseFirestore.instance
-      .collection('products')
-      .doc('hLWQUcBxUXPezSJEctw6')
-      .collection('featuredProducts');
-
-  CollectionReference achivesProductData = FirebaseFirestore.instance
-      .collection('products')
-      .doc('hLWQUcBxUXPezSJEctw6')
-      .collection('achivesProduct');
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,89 +24,39 @@ class _ListProductState extends State<ListProduct> {
           IconButton(onPressed: () {}, icon: Icon(Icons.notifications_none)),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  widget.name,
-                  style: featuredText(),
-                ),
-              ],
+      body: widget.snapshot == null
+          ? load()
+          : Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        widget.name,
+                        style: featuredText(),
+                      ),
+                    ],
+                  ),
+                  Container(
+                      margin: EdgeInsets.symmetric(horizontal: 05),
+                      // color: Colors.blue,
+                      height: MediaQuery.of(context).size.height - 122,
+                      child: GridView.count(
+                        crossAxisCount: 2,
+                        scrollDirection: Axis.vertical,
+                        children: widget.snapshot
+                            .map((e) => listProduct(
+                                amount: e.amount,
+                                url: e.url,
+                                name: e.name,
+                                context: context))
+                            .toList(),
+                      ))
+                ],
+              ),
             ),
-            Container(
-                margin: EdgeInsets.symmetric(horizontal: 05),
-                // color: Colors.blue,
-                height: MediaQuery.of(context).size.height - 122,
-                child: widget.name == 'Achives'
-                    ? StreamBuilder<QuerySnapshot>(
-                        stream: achivesProductData.snapshots(),
-                        builder:
-                            (context, AsyncSnapshot<QuerySnapshot?> snapshot) {
-                          if (snapshot.hasData) {
-                            return GridView.builder(
-                                itemCount: snapshot.data!.docs.length,
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 2,
-                                        crossAxisSpacing: 4.0,
-                                        mainAxisSpacing: 4.0),
-                                itemBuilder: (context, index) {
-                                  DocumentSnapshot dsnapshot =
-                                      snapshot.data!.docs[index];
-
-                                  var data = Product(
-                                      amount: dsnapshot['amount'],
-                                      name: dsnapshot['name'],
-                                      url: dsnapshot['url']);
-                                  return featuredProduct(
-                                      amount: '${data.amount}',
-                                      name: data.name,
-                                      url: data.url,
-                                      isListProduct: true,
-                                      context: context);
-                                });
-                          } else {
-                            return load();
-                          }
-                        })
-                    : StreamBuilder<QuerySnapshot>(
-                        stream: featuredProductData.snapshots(),
-                        builder:
-                            (context, AsyncSnapshot<QuerySnapshot?> snapshot) {
-                          if (snapshot.hasData) {
-                            return GridView.builder(
-                                itemCount: snapshot.data!.docs.length,
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 2,
-                                        crossAxisSpacing: 4.0,
-                                        mainAxisSpacing: 4.0),
-                                itemBuilder: (context, index) {
-                                  DocumentSnapshot dsnapshot =
-                                      snapshot.data!.docs[index];
-
-                                  var data = Product(
-                                      amount: dsnapshot['amount'],
-                                      name: dsnapshot['name'],
-                                      url: dsnapshot['url']);
-                                  return featuredProduct(
-                                      amount: '${data.amount}',
-                                      name: data.name,
-                                      url: data.url,
-                                      isListProduct: true,
-                                      context: context);
-                                });
-                          } else {
-                            return load();
-                          }
-                        }))
-          ],
-        ),
-      ),
     );
   }
 }

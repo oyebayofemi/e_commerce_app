@@ -1,6 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_commerce_app/model/product.dart';
+import 'package:e_commerce_app/providers/category_provider.dart';
+import 'package:e_commerce_app/providers/product_provider.dart';
 import 'package:e_commerce_app/providers/user_provider.dart';
 import 'package:e_commerce_app/screens/cartpage.dart';
 import 'package:e_commerce_app/screens/list_product.dart';
@@ -18,16 +20,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  CollectionReference featuredProductData = FirebaseFirestore.instance
-      .collection('products')
-      .doc('hLWQUcBxUXPezSJEctw6')
-      .collection('featuredProducts');
-
-  CollectionReference achivesProductData = FirebaseFirestore.instance
-      .collection('products')
-      .doc('hLWQUcBxUXPezSJEctw6')
-      .collection('achivesProduct');
-
   final images = [
     AssetImage('assets/fifa.jpg'),
     AssetImage('assets/bluetooth.jpg'),
@@ -47,6 +39,27 @@ class _HomePageState extends State<HomePage> {
     userProvider.getUserData();
 
     var userData = userProvider.currentUserData;
+
+    CategoryProvider categoryProvider = Provider.of(context);
+    categoryProvider.getShirtData();
+    categoryProvider.geTieData();
+    categoryProvider.getDressData();
+    categoryProvider.getShoeData();
+    categoryProvider.getTrouserData();
+
+    List<Product> shirt = categoryProvider.getShirtList;
+    List<Product> shoe = categoryProvider.getShoeList;
+    List<Product> trouser = categoryProvider.getTrouserList;
+    List<Product> dress = categoryProvider.getdressList;
+    List<Product> tie = categoryProvider.getTieList;
+
+    ProductProvider productProvider = Provider.of(context);
+    productProvider.getAchieveData();
+    productProvider.getfeatureData();
+
+    List<Product> feature = productProvider.getFeatureList;
+    List<Product> achieve = productProvider.getAchieveList;
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -97,12 +110,16 @@ class _HomePageState extends State<HomePage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    homeCircleAvatar(Colors.red.shade500, 'shirt_clip.png'),
-                    homeCircleAvatar(Colors.green.shade400, 'gown_clipart.png'),
-                    homeCircleAvatar(Colors.pinkAccent, 'shoe_clip.png'),
-                    homeCircleAvatar(
-                        Colors.blue.shade300, 'trouser_clip-art.png'),
-                    homeCircleAvatar(Colors.yellow.shade300, 'tie-clipart.png'),
+                    homeCircleAvatar(Colors.red.shade500, 'shirt_clip.png',
+                        'Shirt', shirt, context),
+                    homeCircleAvatar(Colors.green.shade400, 'gown_clipart.png',
+                        'Dress', dress, context),
+                    homeCircleAvatar(Colors.pinkAccent, 'shoe_clip.png', 'Shoe',
+                        shoe, context),
+                    homeCircleAvatar(Colors.blue.shade300,
+                        'trouser_clip-art.png', 'Trouser', trouser, context),
+                    homeCircleAvatar(Colors.yellow.shade300, 'tie-clipart.png',
+                        'Tie', tie, context),
                   ],
                 ),
               ),
@@ -124,8 +141,8 @@ class _HomePageState extends State<HomePage> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) =>
-                                      ListProduct(name: 'Featured'),
+                                  builder: (context) => ListProduct(
+                                      name: 'Featured', snapshot: feature),
                                 ));
                           },
                           child: Text(
@@ -141,45 +158,28 @@ class _HomePageState extends State<HomePage> {
               SizedBox(
                 height: 20.h,
               ),
-              FutureBuilder(
-                future: featuredProductData.get(),
-                builder: ((context, AsyncSnapshot snapshot) {
-                  if (snapshot.hasData) {
-                    var firstData = Product(
-                        amount: snapshot.data.docs[0]['amount'],
-                        name: snapshot.data.docs[0]['name'],
-                        url: snapshot.data.docs[0]['url']);
-
-                    var secondData = Product(
-                        amount: snapshot.data.docs[1]['amount'],
-                        name: snapshot.data.docs[1]['name'],
-                        url: snapshot.data.docs[2]['url']);
-
-                    return Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10.w),
-                      child: Row(
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10.w),
+                child: feature.isNotEmpty
+                    ? Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           featuredProduct(
-                              amount: '${firstData.amount}',
-                              name: firstData.name,
-                              url: firstData.url,
-                              isListProduct: false,
+                              amount: feature.elementAt(0).amount,
+                              name: feature.elementAt(0).name,
+                              url: feature.elementAt(0).url,
+                              // isListProduct: false,
                               context: context),
                           featuredProduct(
-                              amount: '${secondData.amount}',
-                              name: secondData.name,
-                              url: secondData.url,
-                              isListProduct: false,
+                              amount: feature.elementAt(1).amount,
+                              name: feature.elementAt(1).name,
+                              url: feature.elementAt(1).url,
+                              // isListProduct: false,
                               context: context),
                         ],
-                      ),
-                    );
-                  } else {
-                    return load();
-                  }
-                }),
+                      )
+                    : load(),
               ),
               Container(
                 height: MediaQuery.of(context).size.height - 2200.h,
@@ -199,8 +199,8 @@ class _HomePageState extends State<HomePage> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) =>
-                                      ListProduct(name: 'Achives'),
+                                  builder: (context) => ListProduct(
+                                      name: 'Achives', snapshot: achieve),
                                 ));
                           },
                           child: Text(
@@ -216,45 +216,28 @@ class _HomePageState extends State<HomePage> {
               SizedBox(
                 height: 20.h,
               ),
-              FutureBuilder(
-                future: achivesProductData.get(),
-                builder: ((context, AsyncSnapshot snapshot) {
-                  if (snapshot.hasData) {
-                    var firstData = Product(
-                        amount: snapshot.data.docs[0]['amount'],
-                        name: snapshot.data.docs[0]['name'],
-                        url: snapshot.data.docs[0]['url']);
-
-                    var secondData = Product(
-                        amount: snapshot.data.docs[1]['amount'],
-                        name: snapshot.data.docs[1]['name'],
-                        url: snapshot.data.docs[2]['url']);
-
-                    return Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10.w),
-                      child: Row(
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10.w),
+                child: achieve.isEmpty
+                    ? load()
+                    : Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           featuredProduct(
-                              amount: '${firstData.amount}',
-                              name: firstData.name,
-                              url: firstData.url,
-                              isListProduct: false,
+                              amount: achieve.elementAt(0).amount,
+                              name: achieve.elementAt(0).name,
+                              url: achieve.elementAt(0).url,
+                              // isListProduct: false,
                               context: context),
                           featuredProduct(
-                              amount: '${secondData.amount}',
-                              name: secondData.name,
-                              url: secondData.url,
-                              isListProduct: false,
+                              amount: achieve.elementAt(1).amount,
+                              name: achieve.elementAt(1).name,
+                              url: achieve.elementAt(1).url,
+                              // isListProduct: false,
                               context: context),
                         ],
                       ),
-                    );
-                  } else {
-                    return load();
-                  }
-                }),
               ),
             ],
           ),
