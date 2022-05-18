@@ -1,7 +1,9 @@
+import 'package:e_commerce_app/providers/cart_provider.dart';
 import 'package:e_commerce_app/screens/cartpage.dart';
 import 'package:e_commerce_app/shared/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 class DetailPage extends StatefulWidget {
   int amount;
@@ -15,9 +17,11 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
-  int quantity = 0;
+  int quantity = 1;
   @override
   Widget build(BuildContext context) {
+    CartProvider cartProvider = Provider.of(context);
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -143,8 +147,8 @@ class _DetailPageState extends State<DetailPage> {
                         onPressed: () {
                           setState(() {
                             quantity--;
-                            if (quantity < 0) {
-                              quantity = 0;
+                            if (quantity < 1) {
+                              quantity = 1;
                             }
                           });
                         },
@@ -179,11 +183,11 @@ class _DetailPageState extends State<DetailPage> {
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => CartPage(
-                              amount: widget.amount,
-                              name: widget.name,
-                              url: widget.url),
+                          builder: (context) => CartPage(),
                         ));
+
+                    cartProvider.getCartData(
+                        widget.name, widget.url, quantity, widget.amount);
                   },
                   child: Text(
                     'CHECK OUT',

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:e_commerce_app/model/cart_model.dart';
 import 'package:e_commerce_app/model/product.dart';
 import 'package:flutter/cupertino.dart';
 

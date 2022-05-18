@@ -1,6 +1,9 @@
+import 'package:e_commerce_app/providers/cart_provider.dart';
 import 'package:e_commerce_app/shared/widget.dart';
+import 'package:e_commerce_app/shared/widget/cartlistproduct_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 class CheckoutPage extends StatefulWidget {
   CheckoutPage({Key? key}) : super(key: key);
@@ -12,6 +15,8 @@ class CheckoutPage extends StatefulWidget {
 class _CheckoutPageState extends State<CheckoutPage> {
   @override
   Widget build(BuildContext context) {
+    CartProvider cartProvider = Provider.of(context);
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -23,23 +28,25 @@ class _CheckoutPageState extends State<CheckoutPage> {
           // color: Colors.blue,
           child: Column(
             children: [
-              Container(
-                height: MediaQuery.of(context).size.height - 940.h,
-                // color: Colors.green,
-                child: ListView(
-                  children: [
-                    cartListProduct(context),
-                    cartListProduct(context),
-                    cartListProduct(context),
-                    cartListProduct(context),
-                    cartListProduct(context),
-                    cartListProduct(context),
-                    cartListProduct(context),
-                    cartListProduct(context),
-                    cartListProduct(context),
-                  ],
-                ),
-              ),
+              cartProvider.getCartModelList.isEmpty
+                  ? load()
+                  : Container(
+                      height: MediaQuery.of(context).size.height - 940.h,
+                      // color: Colors.green,
+                      child: ListView.builder(
+                        itemCount: cartProvider.getCartModelListLength,
+                        itemBuilder: (context, index) {
+                          return CartListProductWidget(
+                            amount: cartProvider.getCartModelList[index].amount,
+                            name: cartProvider.getCartModelList[index].name,
+                            quantity:
+                                cartProvider.getCartModelList[index].quantity,
+                            url: cartProvider.getCartModelList[index].url,
+                            isCheckOutPage: true,
+                          );
+                        },
+                      ),
+                    ),
               Container(
                 margin: EdgeInsets.only(top: 10),
                 // color: Colors.red,
