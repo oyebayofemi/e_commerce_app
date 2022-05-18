@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:e_commerce_app/model/category_icon.dart';
 import 'package:e_commerce_app/model/product.dart';
 import 'package:e_commerce_app/providers/category_provider.dart';
 import 'package:e_commerce_app/providers/product_provider.dart';
@@ -60,6 +61,22 @@ class _HomePageState extends State<HomePage> {
     List<Product> feature = productProvider.getFeatureList;
     List<Product> achieve = productProvider.getAchieveList;
 
+    categoryProvider.getCategoryIconData();
+    List<CategoryIcon> categoryIcon = categoryProvider.getCategoryList;
+
+    // print(categoryIcon);
+
+    // print(categoryIcon.elementAt(0).name);
+    // print(categoryIcon.elementAt(1).name);
+    // print(categoryIcon.elementAt(2).name);
+    // print(categoryIcon.elementAt(3).name);
+    // print(categoryIcon.elementAt(4).name);
+
+    // print(categoryIcon.elementAt(1).image);
+    // print(categoryIcon.elementAt(2).image);
+    // print(categoryIcon.elementAt(3).image);
+    // print(categoryIcon.elementAt(4).image);
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -107,22 +124,62 @@ class _HomePageState extends State<HomePage> {
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 10, right: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    homeCircleAvatar(Colors.red.shade500, 'shirt_clip.png',
-                        'Shirt', shirt, context),
-                    homeCircleAvatar(Colors.green.shade400, 'gown_clipart.png',
-                        'Dress', dress, context),
-                    homeCircleAvatar(Colors.pinkAccent, 'shoe_clip.png', 'Shoe',
-                        shoe, context),
-                    homeCircleAvatar(Colors.blue.shade300,
-                        'trouser_clip-art.png', 'Trouser', trouser, context),
-                    homeCircleAvatar(Colors.yellow.shade300, 'tie-clipart.png',
-                        'Tie', tie, context),
-                  ],
-                ),
+                child: categoryIcon.isNotEmpty
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          homeCircleAvatar(
+                              Colors.green.shade400,
+                              categoryIcon.elementAt(0).image,
+                              'Dress',
+                              dress,
+                              context),
+                          homeCircleAvatar(
+                              Colors.red.shade500,
+                              categoryIcon.elementAt(1).image,
+                              'Shirt',
+                              shirt,
+                              context),
+                          homeCircleAvatar(
+                              Colors.pinkAccent,
+                              categoryIcon.elementAt(2).image,
+                              'Shoe',
+                              shoe,
+                              context),
+                          homeCircleAvatar(
+                              Colors.yellow.shade300,
+                              categoryIcon.elementAt(3).image,
+                              'Tie',
+                              tie,
+                              context),
+                          homeCircleAvatar(
+                              Colors.blue.shade300,
+                              categoryIcon.elementAt(4).image,
+                              'Trouser',
+                              trouser,
+                              context),
+                        ],
+                      )
+                    : load(),
               ),
+              // Padding(
+              //   padding: const EdgeInsets.only(left: 10, right: 10),
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //     children: [
+              //       homeCircleAvatar(Colors.red.shade500, 'shirt_clip.png',
+              //           'Shirt', shirt, context),
+              //       homeCircleAvatar(Colors.green.shade400, 'gown_clipart.png',
+              //           'Dress', dress, context),
+              //       homeCircleAvatar(Colors.pinkAccent, 'shoe_clip.png', 'Shoe',
+              //           shoe, context),
+              //       homeCircleAvatar(Colors.blue.shade300,
+              //           'trouser_clip-art.png', 'Trouser', trouser, context),
+              //       homeCircleAvatar(Colors.yellow.shade300, 'tie-clipart.png',
+              //           'Tie', tie, context),
+              //     ],
+              //   ),
+              // ),
               Container(
                 height: MediaQuery.of(context).size.height - 2190.h,
                 // color: Colors.blue,

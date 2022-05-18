@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:e_commerce_app/model/category_icon.dart';
 import 'package:e_commerce_app/model/product.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -18,6 +19,9 @@ class CategoryProvider extends ChangeNotifier {
 
   late Product trouserData;
   List<Product> trouser = [];
+
+  late CategoryIcon iconData;
+  List<CategoryIcon> categoryIcon = [];
 
   Future getShirtData() async {
     List<Product> newList = [];
@@ -43,6 +47,29 @@ class CategoryProvider extends ChangeNotifier {
 
   List<Product> get getShirtList {
     return shirt;
+  }
+
+  Future getCategoryIconData() async {
+    List<CategoryIcon> newList = [];
+    CollectionReference categoryCollection =
+        FirebaseFirestore.instance.collection('categoryIcon');
+
+    QuerySnapshot categorySnapshot =
+        await categoryCollection.orderBy('name', descending: false).get();
+
+    categorySnapshot.docs.forEach(
+      (element) {
+        iconData =
+            CategoryIcon(image: element.get('url'), name: element.get('name'));
+        newList.add(iconData);
+      },
+    );
+    categoryIcon = newList;
+    notifyListeners();
+  }
+
+  List<CategoryIcon> get getCategoryList {
+    return categoryIcon;
   }
 
   Future getDressData() async {

@@ -179,7 +179,7 @@ Widget homeCircleAvatar(
         height: 130.h,
         child: Image(
           // color: Colors.red,
-          image: AssetImage('assets/home_circle_avatar/$url'),
+          image: NetworkImage(url),
         ),
       ),
     ),
