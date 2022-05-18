@@ -1,6 +1,7 @@
 import 'package:e_commerce_app/providers/cart_provider.dart';
 import 'package:e_commerce_app/screens/cartpage.dart';
 import 'package:e_commerce_app/shared/widget.dart';
+import 'package:e_commerce_app/shared/widget/notification_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +25,12 @@ class _DetailPageState extends State<DetailPage> {
 
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         elevation: 0,
+        title: Text('Detail Page'),
+        actions: [
+          NotificationButton(),
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(

@@ -9,6 +9,7 @@ import 'package:e_commerce_app/screens/cartpage.dart';
 import 'package:e_commerce_app/screens/list_product.dart';
 import 'package:e_commerce_app/services.dart/authService.dart';
 import 'package:e_commerce_app/shared/widget.dart';
+import 'package:e_commerce_app/shared/widget/notification_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -84,7 +85,7 @@ class _HomePageState extends State<HomePage> {
         title: Text('Home Page'),
         actions: [
           IconButton(onPressed: () {}, icon: Icon(Icons.search)),
-          IconButton(onPressed: () {}, icon: Icon(Icons.notifications_none)),
+          NotificationButton(),
         ],
       ),
       body: Container(

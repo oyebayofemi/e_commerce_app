@@ -1,7 +1,9 @@
 import 'package:e_commerce_app/providers/cart_provider.dart';
+import 'package:e_commerce_app/providers/notification_provider.dart';
 import 'package:e_commerce_app/screens/checkout_screen.dart';
 import 'package:e_commerce_app/shared/widget.dart';
 import 'package:e_commerce_app/shared/widget/cartlistproduct_widget.dart';
+import 'package:e_commerce_app/shared/widget/notification_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -16,19 +18,22 @@ class _CartPageState extends State<CartPage> {
   @override
   Widget build(BuildContext context) {
     CartProvider cartProvider = Provider.of(context);
+    NotificationProvider notificationProvider = Provider.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Cart'),
+        title: Text('Cart Page'),
         centerTitle: true,
         elevation: 0,
         actions: [
           // IconButton(onPressed: () {}, icon: Icon(Icons.search)),
-          IconButton(onPressed: () {}, icon: Icon(Icons.notifications_none)),
+          // IconButton(onPressed: () {}, icon: Icon(Icons.notifications_none)),
+          NotificationButton(),
         ],
       ),
       bottomNavigationBar: GestureDetector(
         onTap: () {
+          notificationProvider.addNotification('notification');
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
