@@ -225,3 +225,46 @@ TextStyle checkoutTotalText() {
     fontWeight: FontWeight.bold,
   );
 }
+
+TextStyle profileTitleText() {
+  return TextStyle(
+    fontSize: 45.sp,
+    // fontWeight: FontWeight.bold,
+    color: Colors.grey,
+  );
+}
+
+TextStyle profileText() {
+  return TextStyle(
+    fontSize: 45.sp,
+    fontWeight: FontWeight.bold,
+    // color: Colors.grey,
+  );
+}
+
+Card profileTextWidget(String title, String text) {
+  return Card(
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+    child: Container(
+      height: 170.h,
+      // decoration: BoxDecoration(
+      //     borderRadius: BorderRadius.circular(50)),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 15),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              title,
+              style: profileTitleText(),
+            ),
+            Text(
+              text,
+              style: profileText(),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+}

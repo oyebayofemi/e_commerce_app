@@ -7,6 +7,7 @@ import 'package:e_commerce_app/providers/product_provider.dart';
 import 'package:e_commerce_app/providers/user_provider.dart';
 import 'package:e_commerce_app/screens/cartpage.dart';
 import 'package:e_commerce_app/screens/list_product.dart';
+import 'package:e_commerce_app/screens/profile_page.dart';
 import 'package:e_commerce_app/services.dart/authService.dart';
 import 'package:e_commerce_app/shared/widget.dart';
 import 'package:e_commerce_app/shared/widget/notification_widget.dart';
@@ -306,18 +307,27 @@ class _HomePageState extends State<HomePage> {
           children: [
             userData?.name == null
                 ? load()
-                : UserAccountsDrawerHeader(
-                    accountName: Text(
-                      userData!.name!,
-                      style: TextStyle(color: Colors.white),
+                : GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProfilePage(),
+                          ));
+                    },
+                    child: UserAccountsDrawerHeader(
+                      accountName: Text(
+                        userData!.name!,
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      accountEmail: Text(
+                        userData.email!,
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      currentAccountPicture: CircleAvatar(
+                          backgroundImage:
+                              AssetImage('assets/account_image.png')),
                     ),
-                    accountEmail: Text(
-                      userData.email!,
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    currentAccountPicture: CircleAvatar(
-                        backgroundImage:
-                            AssetImage('assets/account_image.png')),
                   ),
             ListTile(
                 onTap: () {
