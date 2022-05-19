@@ -62,6 +62,7 @@ class _CartPageState extends State<CartPage> {
               itemCount: cartProvider.getCartModelListLength,
               itemBuilder: (context, index) {
                 return CartListProductWidget(
+                  index: index,
                   amount: cartProvider.getCartModelList[index].amount,
                   name: cartProvider.getCartModelList[index].name,
                   quantity: cartProvider.getCartModelList[index].quantity,

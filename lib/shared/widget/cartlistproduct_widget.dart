@@ -1,5 +1,7 @@
+import 'package:e_commerce_app/providers/cart_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 class CartListProductWidget extends StatefulWidget {
   String url;
@@ -7,20 +9,25 @@ class CartListProductWidget extends StatefulWidget {
   int amount;
   int quantity;
   bool isCheckOutPage;
+  int index;
   CartListProductWidget(
       {required this.amount,
       required this.name,
       required this.quantity,
       required this.url,
-      required this.isCheckOutPage});
+      required this.isCheckOutPage,
+      required this.index});
 
   @override
   State<CartListProductWidget> createState() => _CartListProductWidgetState();
 }
 
 class _CartListProductWidgetState extends State<CartListProductWidget> {
+  // late  cartProvider;
   @override
   Widget build(BuildContext context) {
+    CartProvider cartProvider = Provider.of<CartProvider>(context);
+
     return Container(
       height: MediaQuery.of(context).size.height - 1910.h,
       child: Card(
@@ -42,14 +49,21 @@ class _CartListProductWidgetState extends State<CartListProductWidget> {
                   // child: Text('s'),
                 ),
                 Container(
-                  height: MediaQuery.of(context).size.height - 1950.h,
+                  height: MediaQuery.of(context).size.height - 1935.h,
                   width: MediaQuery.of(context).size.width - 620.w,
                   child: ListTile(
                     title: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('${widget.name}'),
+                        Wrap(
+                          children: [
+                            Text(
+                              '${widget.name}',
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
                         Text('CLoths'),
                         Text(
                           '\$ ${widget.amount}',
@@ -82,9 +96,13 @@ class _CartListProductWidgetState extends State<CartListProductWidget> {
                                           color: Colors.grey.shade200,
                                           onPressed: () {
                                             setState(() {
-                                              widget.quantity--;
-                                              if (widget.quantity < 1) {
-                                                widget.quantity = 1;
+                                              if (widget.quantity > 1) {
+                                                widget.quantity--;
+
+                                                // widget.quantity = 1;
+                                                cartProvider.updateCartData(
+                                                    widget.index,
+                                                    widget.quantity);
                                               }
                                             });
                                           },
@@ -103,6 +121,9 @@ class _CartListProductWidgetState extends State<CartListProductWidget> {
                                           onPressed: () {
                                             setState(() {
                                               widget.quantity++;
+                                              cartProvider.updateCartData(
+                                                  widget.index,
+                                                  widget.quantity);
                                             });
                                           },
                                           child: Text('+')),

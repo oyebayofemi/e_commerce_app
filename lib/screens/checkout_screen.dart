@@ -16,7 +16,19 @@ class CheckoutPage extends StatefulWidget {
 class _CheckoutPageState extends State<CheckoutPage> {
   @override
   Widget build(BuildContext context) {
+    double subtotal = 0;
+    double discount = 30;
+    double total;
+    double discountRupees;
+    double shipping = 60;
     CartProvider cartProvider = Provider.of(context);
+
+    cartProvider.cartModelList.forEach((e) {
+      subtotal += e.amount + e.quantity;
+    });
+
+    discountRupees = discount / 100 * subtotal;
+    total = subtotal + shipping - discountRupees;
 
     return Scaffold(
       appBar: AppBar(
@@ -49,6 +61,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 cartProvider.getCartModelList[index].quantity,
                             url: cartProvider.getCartModelList[index].url,
                             isCheckOutPage: true,
+                            index: index,
                           );
                         },
                       ),
@@ -60,10 +73,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    checkoutConstant('Your Price', '60.00', false, false),
-                    checkoutConstant('Discount', '6', false, true),
-                    checkoutConstant('Shipping', '60.00', false, false),
-                    checkoutConstant('Total', '60.00', true, false),
+                    checkoutConstant('Subtotal', '$subtotal', false, false),
+                    checkoutConstant('Discount', '$discount', false, true),
+                    checkoutConstant('Shipping', '$shipping', false, false),
+                    checkoutConstant('Total', '$total', true, false),
                   ],
                 ),
               ),
@@ -112,64 +125,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
             style: isTotal ? checkoutTotalText() : checkoutTitleText(),
           ),
         ],
-      ),
-    );
-  }
-
-  Container cartListProduct(
-    BuildContext context,
-  ) {
-    return Container(
-      height: MediaQuery.of(context).size.height - 2010.h,
-      child: Card(
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Container(
-                  height: MediaQuery.of(context).size.height - 2150.h,
-                  width: MediaQuery.of(context).size.width - 620.w,
-                  // color: Colors.red,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                        fit: BoxFit.contain,
-                        image: AssetImage(
-                          'assets/men_watch.jpeg',
-                        )),
-                  ),
-                  // child: Text('s'),
-                ),
-                Container(
-                  height: MediaQuery.of(context).size.height - 2050.h,
-                  width: MediaQuery.of(context).size.width - 620.w,
-                  child: ListTile(
-                    title: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Men Trouser'),
-                        Text('CLoths'),
-                        Text(
-                          '\$ 300.00',
-                          style: TextStyle(color: Colors.grey[500]),
-                        ),
-                        Row(
-                          children: [
-                            Text('Quantity : '),
-                            SizedBox(
-                              width: 20.w,
-                            ),
-                            Text('1'),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            )
-          ],
-        ),
       ),
     );
   }

@@ -10,7 +10,15 @@ class CartProvider extends ChangeNotifier {
         CartModel(name: name, url: url, amount: amount, quantity: quantity);
 
     cartModelList.add(cartModelData);
-    notifyListeners();
+    // notifyListeners();
+  }
+
+  void updateCartData(
+    int index,
+    int quantity,
+  ) {
+    cartModelList[index].quantity = quantity;
+    // notifyListeners();
   }
 
   List<CartModel> get getCartModelList {
