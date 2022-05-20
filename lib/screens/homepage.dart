@@ -309,7 +309,7 @@ class _HomePageState extends State<HomePage> {
                 ? load()
                 : GestureDetector(
                     onTap: () {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                             builder: (context) => ProfilePage(),
@@ -325,8 +325,8 @@ class _HomePageState extends State<HomePage> {
                         style: TextStyle(color: Colors.white),
                       ),
                       currentAccountPicture: CircleAvatar(
-                          backgroundImage:
-                              AssetImage('assets/account_image.png')),
+                          backgroundImage: NetworkImage(userData.url ??
+                              'https://i.stack.imgur.com/l60Hf.png')),
                     ),
                   ),
             ListTile(

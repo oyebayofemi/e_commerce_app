@@ -5,7 +5,7 @@ class UserModel {
   final String? email;
   final String? name;
   final String? id;
-  // final String? pictureModel;
+  final String? url;
   final String? phoneNO;
 
   Map<String, dynamic> toJson() => {
@@ -13,19 +13,21 @@ class UserModel {
         'name': name,
         'id': id,
         'phoneNO': phoneNO,
+        'url': url,
         // 'pictureModel': pictureModel,
       };
 
-  UserModel({this.email, this.id, this.name, this.phoneNO});
+  UserModel({this.email, this.id, this.name, this.phoneNO, this.url});
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-        email: json['email'],
-        id: json['id'] as String?,
-        name: json['name'],
-        phoneNO: json['phoneNO']
-        // pictureModel: json['pictureModel'],
-        );
+      email: json['email'],
+      id: json['id'] as String?,
+      name: json['name'],
+      phoneNO: json['phoneNO'],
+      url: json['url'],
+      // pictureModel: json['pictureModel'],
+    );
   }
 
   static UserModel fromSnap(DocumentSnapshot snap) {
@@ -37,6 +39,7 @@ class UserModel {
       id: snapshot["id"],
       email: snapshot["email"],
       phoneNO: snapshot['phoneNO'],
+      url: snapshot['url'],
     );
   }
 }

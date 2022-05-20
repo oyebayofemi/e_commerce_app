@@ -19,6 +19,7 @@ class UserProvider extends ChangeNotifier {
         phoneNO: value.get('phoneNO'),
         name: value.get('name'),
         id: value.get('id'),
+        url: value.get('url'),
       );
       currentData = userModel;
       notifyListeners();

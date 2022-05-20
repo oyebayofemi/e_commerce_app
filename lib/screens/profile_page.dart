@@ -1,9 +1,18 @@
+import 'dart:typed_data';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_commerce_app/model/userModel.dart';
 import 'package:e_commerce_app/providers/user_provider.dart';
+import 'package:e_commerce_app/screens/homepage.dart';
+import 'package:e_commerce_app/services.dart/storage.dart';
+import 'package:e_commerce_app/shared/toast.dart';
 import 'package:e_commerce_app/shared/widget.dart';
 import 'package:e_commerce_app/shared/widget/notification_widget.dart';
+import 'package:e_commerce_app/utils/util.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -15,6 +24,42 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   bool edit = false;
+  Uint8List? _image;
+  StorageMethods storageMethods = StorageMethods();
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  FirebaseAuth _auth = FirebaseAuth.instance;
+
+  selectImageCamera() async {
+    Uint8List im = await pickImage(ImageSource.camera);
+    // set state because we need to display the image we selected on the circle avatar
+    setState(() {
+      _image = im;
+    });
+  }
+
+  selectImageGallery() async {
+    Uint8List im = await pickImage(ImageSource.gallery);
+    // set state because we need to display the image we selected on the circle avatar
+    setState(() {
+      _image = im;
+    });
+  }
+
+  uploadToFirebase() async {
+    try {
+      String url = await storageMethods.uploadFile(
+          _image!); // this will upload the file and store url in the variable 'url'
+      await _firestore.collection('users').doc(_auth.currentUser!.uid).update({
+        //use update to update the doc fields.
+        'url': url
+      });
+      showToast('Success');
+    } catch (e) {
+      print(e.toString());
+      showToast('Couldnt Upload file');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     UserProvider userProvider = Provider.of(context);
@@ -36,7 +81,15 @@ class _ProfilePageState extends State<ProfilePage> {
                   });
                 },
                 icon: Icon(Icons.cancel))
-            : IconButton(onPressed: () {}, icon: Icon(Icons.arrow_back)),
+            : IconButton(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => HomePage(),
+                      ));
+                },
+                icon: Icon(Icons.arrow_back)),
         actions: [
           // IconButton(onPressed: () {}, icon: Icon(Icons.search)),
           edit == false
@@ -51,7 +104,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ],
       ),
       body: SingleChildScrollView(
-        child: userData?.name == null
+        child: userData == null
             ? load()
             : Column(
                 children: [
@@ -68,7 +121,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             CircleAvatar(
                               maxRadius: 160.r,
                               backgroundColor: Colors.grey[200],
-                              backgroundImage: NetworkImage(
+                              backgroundImage: NetworkImage(userData.url ??
                                   'https://i.stack.imgur.com/l60Hf.png'),
                             ),
                           ],
@@ -78,10 +131,19 @@ class _ProfilePageState extends State<ProfilePage> {
                         Positioned(
                           height: 800.h,
                           left: 600.w,
-                          child: CircleAvatar(
-                            radius: 50.r,
-                            backgroundColor: Colors.white,
-                            child: Icon(Icons.edit),
+                          child: GestureDetector(
+                            onTap: () async {
+                              await showModalBottomSheet(
+                                  context: context,
+                                  builder: (builder) => bottomSheet());
+
+                              await uploadToFirebase();
+                            },
+                            child: CircleAvatar(
+                              radius: 50.r,
+                              backgroundColor: Colors.white,
+                              child: Icon(Icons.edit),
+                            ),
                           ),
                         ),
                     ],
@@ -97,7 +159,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              profileTextWidget('Name', userData!.name!),
+                              profileTextWidget('Name', userData.name!),
                               profileTextWidget('Email', userData.email!),
                               profileTextWidget(
                                   'Phone Number', userData.phoneNO!),
@@ -113,7 +175,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             children: [
                               TextFormField(
                                 decoration:
-                                    InputDecoration(hintText: userData!.name!),
+                                    InputDecoration(hintText: userData.name!),
                               ),
                               TextFormField(
                                 decoration:
@@ -157,6 +219,41 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ],
               ),
+      ),
+    );
+  }
+
+  Widget bottomSheet() {
+    return Container(
+      height: 70,
+      child: Column(
+        children: [
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: FlatButton.icon(
+                    onPressed: () async {
+                      await selectImageCamera();
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(Icons.camera_alt),
+                    label: Text('Camera')),
+              ),
+              Expanded(
+                child: FlatButton.icon(
+                    onPressed: () async {
+                      await selectImageGallery();
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(Icons.photo_size_select_actual_rounded),
+                    label: Text('Gallery')),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

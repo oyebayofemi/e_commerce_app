@@ -49,7 +49,7 @@ class _CartListProductWidgetState extends State<CartListProductWidget> {
                   // child: Text('s'),
                 ),
                 Container(
-                  height: MediaQuery.of(context).size.height - 1935.h,
+                  height: MediaQuery.of(context).size.height - 1950.h,
                   width: MediaQuery.of(context).size.width - 620.w,
                   child: ListTile(
                     title: Column(
