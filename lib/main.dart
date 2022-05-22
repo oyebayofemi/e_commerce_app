@@ -4,7 +4,8 @@ import 'package:e_commerce_app/providers/category_provider.dart';
 import 'package:e_commerce_app/providers/notification_provider.dart';
 import 'package:e_commerce_app/providers/product_provider.dart';
 import 'package:e_commerce_app/providers/user_provider.dart';
-import 'package:e_commerce_app/services.dart/authService.dart';
+import 'package:e_commerce_app/services/authService.dart';
+
 import 'package:e_commerce_app/wrapper.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';

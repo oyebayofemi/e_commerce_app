@@ -4,8 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_commerce_app/model/userModel.dart';
 import 'package:e_commerce_app/providers/user_provider.dart';
 import 'package:e_commerce_app/screens/homepage.dart';
-import 'package:e_commerce_app/services.dart/authService.dart';
-import 'package:e_commerce_app/services.dart/storage.dart';
+import 'package:e_commerce_app/services/authService.dart';
+import 'package:e_commerce_app/services/storage.dart';
+
 import 'package:e_commerce_app/shared/toast.dart';
 import 'package:e_commerce_app/shared/widget.dart';
 import 'package:e_commerce_app/shared/widget/notification_widget.dart';

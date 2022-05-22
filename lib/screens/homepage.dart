@@ -10,7 +10,7 @@ import 'package:e_commerce_app/screens/checkout_screen.dart';
 import 'package:e_commerce_app/screens/contact_us.dart';
 import 'package:e_commerce_app/screens/list_product.dart';
 import 'package:e_commerce_app/screens/profile_page.dart';
-import 'package:e_commerce_app/services.dart/authService.dart';
+import 'package:e_commerce_app/services/authService.dart';
 import 'package:e_commerce_app/shared/widget.dart';
 import 'package:e_commerce_app/shared/widget/notification_widget.dart';
 import 'package:flutter/material.dart';

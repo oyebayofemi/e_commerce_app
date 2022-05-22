@@ -1,4 +1,4 @@
-import 'package:e_commerce_app/services.dart/authService.dart';
+import 'package:e_commerce_app/services/authService.dart';
 import 'package:e_commerce_app/shared/validate_email.dart';
 import 'package:e_commerce_app/shared/widget.dart';
 import 'package:flutter/material.dart';

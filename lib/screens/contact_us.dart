@@ -1,5 +1,5 @@
 import 'package:e_commerce_app/providers/user_provider.dart';
-import 'package:e_commerce_app/services.dart/authService.dart';
+import 'package:e_commerce_app/services/authService.dart';
 import 'package:e_commerce_app/shared/toast.dart';
 import 'package:e_commerce_app/shared/widget.dart';
 import 'package:flutter/material.dart';

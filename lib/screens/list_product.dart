@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_commerce_app/model/product.dart';
+import 'package:e_commerce_app/providers/product_provider.dart';
+import 'package:e_commerce_app/services/search.dart';
 import 'package:e_commerce_app/shared/widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ListProduct extends StatefulWidget {
   String name;
@@ -15,12 +18,19 @@ class ListProduct extends StatefulWidget {
 class _ListProductState extends State<ListProduct> {
   @override
   Widget build(BuildContext context) {
+    ProductProvider productProvider = Provider.of(context);
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         elevation: 0,
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.search)),
+          IconButton(
+              onPressed: () {
+                productProvider.getSearchList(list: widget.snapshot);
+                showSearch(context: context, delegate: Search());
+              },
+              icon: Icon(Icons.search)),
           IconButton(onPressed: () {}, icon: Icon(Icons.notifications_none)),
         ],
       ),
