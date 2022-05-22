@@ -1,10 +1,15 @@
 import 'package:e_commerce_app/providers/cart_provider.dart';
+import 'package:e_commerce_app/providers/user_provider.dart';
+import 'package:e_commerce_app/services.dart/authService.dart';
+import 'package:e_commerce_app/shared/toast.dart';
 import 'package:e_commerce_app/shared/widget.dart';
 import 'package:e_commerce_app/shared/widget/cartlistproduct_widget.dart';
 import 'package:e_commerce_app/shared/widget/notification_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CheckoutPage extends StatefulWidget {
   CheckoutPage({Key? key}) : super(key: key);
@@ -14,6 +19,8 @@ class CheckoutPage extends StatefulWidget {
 }
 
 class _CheckoutPageState extends State<CheckoutPage> {
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
   @override
   Widget build(BuildContext context) {
     double subtotal = 0;
@@ -30,6 +37,19 @@ class _CheckoutPageState extends State<CheckoutPage> {
     discountRupees = discount / 100 * subtotal;
     total = subtotal + shipping - discountRupees;
 
+    if (cartProvider.getCartModelList.isEmpty) {
+      total = 0.0;
+      shipping = 0.0;
+      discount = 0.0;
+    }
+    late int indexs;
+
+    UserProvider userProvider = Provider.of(context);
+
+    userProvider.getUserData();
+
+    var userData = userProvider.currentUserData;
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -42,55 +62,95 @@ class _CheckoutPageState extends State<CheckoutPage> {
         ],
       ),
       body: SingleChildScrollView(
-        child: Container(
-          // color: Colors.blue,
-          child: Column(
-            children: [
-              cartProvider.getCartModelList.isEmpty
-                  ? load()
-                  : Container(
-                      height: MediaQuery.of(context).size.height - 940.h,
-                      // color: Colors.green,
-                      child: ListView.builder(
-                        itemCount: cartProvider.getCartModelListLength,
-                        itemBuilder: (context, index) {
-                          return CartListProductWidget(
-                            amount: cartProvider.getCartModelList[index].amount,
-                            name: cartProvider.getCartModelList[index].name,
-                            quantity:
-                                cartProvider.getCartModelList[index].quantity,
-                            url: cartProvider.getCartModelList[index].url,
-                            isCheckOutPage: true,
-                            index: index,
-                          );
-                        },
+        child: userData == null
+            ? load()
+            : Container(
+                // color: Colors.blue,
+                child: Column(
+                  children: [
+                    cartProvider.getCartModelList.isEmpty
+                        ? Container(
+                            height: MediaQuery.of(context).size.height - 960.h,
+                            child: Center(
+                              child: Text('No Item'),
+                            ),
+                          )
+                        : Container(
+                            height: MediaQuery.of(context).size.height - 940.h,
+                            // color: Colors.green,
+                            child: ListView.builder(
+                              itemCount: cartProvider.getCartModelListLength,
+                              itemBuilder: (context, index) {
+                                indexs = index;
+                                return CartListProductWidget(
+                                  amount: cartProvider
+                                      .getCartModelList[index].amount,
+                                  name:
+                                      cartProvider.getCartModelList[index].name,
+                                  quantity: cartProvider
+                                      .getCartModelList[index].quantity,
+                                  url: cartProvider.getCartModelList[index].url,
+                                  isCheckOutPage: true,
+                                  index: index,
+                                );
+                              },
+                            ),
+                          ),
+                    Container(
+                      margin: EdgeInsets.only(top: 10),
+                      // color: Colors.red,
+                      height: MediaQuery.of(context).size.height - 1900.h,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          checkoutConstant(
+                              'Subtotal', '$subtotal', false, false),
+                          checkoutConstant(
+                              'Discount', '$discount', false, true),
+                          checkoutConstant(
+                              'Shipping', '$shipping', false, false),
+                          checkoutConstant('Total', '$total', true, false),
+                        ],
                       ),
                     ),
-              Container(
-                margin: EdgeInsets.only(top: 10),
-                // color: Colors.red,
-                height: MediaQuery.of(context).size.height - 1900.h,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    checkoutConstant('Subtotal', '$subtotal', false, false),
-                    checkoutConstant('Discount', '$discount', false, true),
-                    checkoutConstant('Shipping', '$shipping', false, false),
-                    checkoutConstant('Total', '$total', true, false),
                   ],
                 ),
               ),
-            ],
-          ),
-        ),
       ),
       bottomNavigationBar: GestureDetector(
         onTap: () {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => CheckoutPage(),
-              ));
+          // Navigator.pushReplacement(
+          //     context,
+          //     MaterialPageRoute(
+          //       builder: (context) => CheckoutPage(),
+          //     ));
+          if (cartProvider.getCartModelList.isNotEmpty) {
+            if (indexs != null && userData != null) {
+              _firestore
+                  .collection('orders')
+                  .doc(_auth.currentUser!.uid)
+                  .collection('order')
+                  .add({
+                'product': cartProvider.getCartModelList
+                    .map((d) => {
+                          'productName': d.name,
+                          'productAmount': d.amount,
+                          'productQuantity': d.quantity,
+                        })
+                    .toList(),
+                'total': total,
+                'name': userData.name!,
+                'email': userData.email!,
+                'phone': userData.phoneNO!,
+                'uid': userData.id!,
+              });
+
+              cartProvider.clearCheckoutList();
+            }
+          } else {
+            print('No item');
+            showToast('No item');
+          }
         },
         child: Container(
             margin: EdgeInsets.symmetric(horizontal: 12, vertical: 10),

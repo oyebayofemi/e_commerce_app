@@ -26,6 +26,17 @@ class CartProvider extends ChangeNotifier {
   }
 
   int get getCartModelListLength {
+    // notifyListeners();
     return cartModelList.length;
+  }
+
+  void deleteCheckoutProduct(int index) {
+    cartModelList.removeAt(index);
+    notifyListeners();
+  }
+
+  void clearCheckoutList() {
+    cartModelList.clear();
+    notifyListeners();
   }
 }

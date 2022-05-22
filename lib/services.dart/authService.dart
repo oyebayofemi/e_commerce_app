@@ -139,6 +139,18 @@ class AuthService extends ChangeNotifier {
     return _userFromFirebase(user!);
   }
 
+  updateUserProfile(String name, String number) async {
+    try {
+      await _firestore.collection('users').doc(_auth.currentUser!.uid).update({
+        'name': name,
+        'phoneNO': number,
+      });
+      showToast("Updated Successfully");
+    } catch (e) {
+      print(e);
+    }
+  }
+
   resetPasswordLink(String email, BuildContext context) async {
     try {
       await _auth.sendPasswordResetEmail(email: email);
@@ -153,6 +165,15 @@ class AuthService extends ChangeNotifier {
     } catch (e) {
       print(e);
     }
+  }
+
+  sendMessage(String message, String email, String name) {
+    _firestore.collection('messages').add({
+      'message': message,
+      'email': email,
+      'name': name,
+    });
+    showToast('Message Sent Successfully!!!');
   }
 
   Future signout() async {

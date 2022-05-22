@@ -37,7 +37,7 @@ class _CartListProductWidgetState extends State<CartListProductWidget> {
               children: [
                 Container(
                   height: MediaQuery.of(context).size.height - 1950.h,
-                  width: MediaQuery.of(context).size.width - 620.w,
+                  width: MediaQuery.of(context).size.width - 640.w,
                   // color: Colors.red,
                   decoration: BoxDecoration(
                     image: DecorationImage(
@@ -135,6 +135,14 @@ class _CartListProductWidgetState extends State<CartListProductWidget> {
                     ),
                   ),
                 ),
+                if (widget.isCheckOutPage == true)
+                  Container(
+                    child: IconButton(
+                        onPressed: () {
+                          cartProvider.deleteCheckoutProduct(widget.index);
+                        },
+                        icon: Icon(Icons.close)),
+                  )
               ],
             )
           ],

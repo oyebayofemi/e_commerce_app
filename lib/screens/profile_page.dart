@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_commerce_app/model/userModel.dart';
 import 'package:e_commerce_app/providers/user_provider.dart';
 import 'package:e_commerce_app/screens/homepage.dart';
+import 'package:e_commerce_app/services.dart/authService.dart';
 import 'package:e_commerce_app/services.dart/storage.dart';
 import 'package:e_commerce_app/shared/toast.dart';
 import 'package:e_commerce_app/shared/widget.dart';
@@ -23,7 +24,9 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  String? phone, name;
   bool edit = false;
+  bool isloading = true;
   Uint8List? _image;
   StorageMethods storageMethods = StorageMethods();
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -95,8 +98,22 @@ class _ProfilePageState extends State<ProfilePage> {
           edit == false
               ? NotificationButton()
               : IconButton(
-                  onPressed: () {
+                  onPressed: () async {
                     setState(() {
+                      isloading = true;
+                    });
+
+                    if (name == null) {
+                      name = userData?.name!;
+                    }
+                    if (phone == null) {
+                      phone = userData?.phoneNO!;
+                    }
+
+                    await AuthService().updateUserProfile(name!, phone!);
+
+                    setState(() {
+                      isloading = false;
                       edit = false;
                     });
                   },
@@ -106,119 +123,132 @@ class _ProfilePageState extends State<ProfilePage> {
       body: SingleChildScrollView(
         child: userData == null
             ? load()
-            : Column(
-                children: [
-                  Stack(
-                    overflow: Overflow.visible,
+            : isloading == true
+                ? load()
+                : Column(
                     children: [
+                      Stack(
+                        overflow: Overflow.visible,
+                        children: [
+                          Container(
+                            height: 440.h,
+                            width: MediaQuery.of(context).size.width,
+                            // color: Colors.blue,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                CircleAvatar(
+                                  maxRadius: 160.r,
+                                  backgroundColor: Colors.grey[200],
+                                  backgroundImage: NetworkImage(userData.url ??
+                                      'https://i.stack.imgur.com/l60Hf.png'),
+                                ),
+                              ],
+                            ),
+                          ),
+                          if (edit == true)
+                            Positioned(
+                              height: 800.h,
+                              left: 600.w,
+                              child: GestureDetector(
+                                onTap: () async {
+                                  await showModalBottomSheet(
+                                      context: context,
+                                      builder: (builder) => bottomSheet());
+
+                                  await uploadToFirebase();
+                                },
+                                child: CircleAvatar(
+                                  radius: 50.r,
+                                  backgroundColor: Colors.white,
+                                  child: Icon(Icons.edit),
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 150.h,
+                      ),
+                      edit == false
+                          ? Container(
+                              margin: EdgeInsets.symmetric(horizontal: 10),
+                              // color: Colors.blue,
+                              height: 800.h,
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  profileTextWidget('Name', userData.name!),
+                                  profileTextWidget('Email', userData.email!),
+                                  profileTextWidget(
+                                      'Phone Number', userData.phoneNO!),
+                                ],
+                              ),
+                            )
+                          : Container(
+                              margin: EdgeInsets.symmetric(horizontal: 10),
+                              // color: Colors.blue,
+                              height: 800.h,
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  TextFormField(
+                                    initialValue: userData.name!,
+                                    onChanged: (value) => this.name = value,
+                                    validator: (value) => value!.isEmpty
+                                        ? 'Name Field cant be empty'
+                                        : null,
+                                    keyboardType: TextInputType.text,
+                                    textInputAction: TextInputAction.next,
+                                    decoration: profileTextFormDecoration(),
+                                  ),
+                                  profileTextWidget('Email', userData.email!),
+                                  TextFormField(
+                                    initialValue: userData.phoneNO!,
+                                    onChanged: (value) => this.phone = value,
+                                    validator: (value) => value!.isEmpty
+                                        ? 'Phone Field cant be empty'
+                                        : null,
+                                    keyboardType: TextInputType.text,
+                                    textInputAction: TextInputAction.done,
+                                    decoration: profileTextFormDecoration(),
+                                  ),
+                                ],
+                              ),
+                            ),
                       Container(
-                        height: 440.h,
+                        height: 400.h,
                         width: MediaQuery.of(context).size.width,
-                        // color: Colors.blue,
+                        // color: Colors.red,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            CircleAvatar(
-                              maxRadius: 160.r,
-                              backgroundColor: Colors.grey[200],
-                              backgroundImage: NetworkImage(userData.url ??
-                                  'https://i.stack.imgur.com/l60Hf.png'),
+                            ButtonTheme(
+                              buttonColor: Colors.orange,
+                              minWidth: 500.w,
+                              height: 150.h,
+                              child: RaisedButton.icon(
+                                  onPressed: () {
+                                    setState(() {
+                                      edit = true;
+                                    });
+                                  },
+                                  icon: Icon(
+                                    Icons.edit,
+                                    color: Colors.white,
+                                  ),
+                                  label: Text(
+                                    'Edit Profile',
+                                    style: TextStyle(color: Colors.white),
+                                  )),
                             ),
                           ],
                         ),
                       ),
-                      if (edit == true)
-                        Positioned(
-                          height: 800.h,
-                          left: 600.w,
-                          child: GestureDetector(
-                            onTap: () async {
-                              await showModalBottomSheet(
-                                  context: context,
-                                  builder: (builder) => bottomSheet());
-
-                              await uploadToFirebase();
-                            },
-                            child: CircleAvatar(
-                              radius: 50.r,
-                              backgroundColor: Colors.white,
-                              child: Icon(Icons.edit),
-                            ),
-                          ),
-                        ),
                     ],
                   ),
-                  SizedBox(
-                    height: 150.h,
-                  ),
-                  edit == false
-                      ? Container(
-                          margin: EdgeInsets.symmetric(horizontal: 10),
-                          // color: Colors.blue,
-                          height: 800.h,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              profileTextWidget('Name', userData.name!),
-                              profileTextWidget('Email', userData.email!),
-                              profileTextWidget(
-                                  'Phone Number', userData.phoneNO!),
-                            ],
-                          ),
-                        )
-                      : Container(
-                          margin: EdgeInsets.symmetric(horizontal: 10),
-                          // color: Colors.blue,
-                          height: 800.h,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              TextFormField(
-                                decoration:
-                                    InputDecoration(hintText: userData.name!),
-                              ),
-                              TextFormField(
-                                decoration:
-                                    InputDecoration(hintText: userData.email!),
-                              ),
-                              TextFormField(
-                                decoration: InputDecoration(
-                                    hintText: userData.phoneNO!),
-                              ),
-                            ],
-                          ),
-                        ),
-                  Container(
-                    height: 400.h,
-                    width: MediaQuery.of(context).size.width,
-                    // color: Colors.red,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        ButtonTheme(
-                          buttonColor: Colors.orange,
-                          minWidth: 500.w,
-                          height: 150.h,
-                          child: RaisedButton.icon(
-                              onPressed: () {
-                                setState(() {
-                                  edit = true;
-                                });
-                              },
-                              icon: Icon(
-                                Icons.edit,
-                                color: Colors.white,
-                              ),
-                              label: Text(
-                                'Edit Profile',
-                                style: TextStyle(color: Colors.white),
-                              )),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
       ),
     );
   }

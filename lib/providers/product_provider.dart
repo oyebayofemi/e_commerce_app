@@ -61,4 +61,17 @@ class ProductProvider extends ChangeNotifier {
   List<Product> get getAchieveList {
     return achieve;
   }
+
+  late List<Product> searchList;
+  void getSearchList({required List<Product> list}) {
+    searchList = list;
+  }
+
+  List<Product> searchProductList(String query) {
+    List<Product> search = searchList.where((element) {
+      return element.name.toUpperCase().contains(query) ||
+          element.name.toLowerCase().contains(query);
+    }).toList();
+    return search;
+  }
 }

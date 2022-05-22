@@ -6,6 +6,8 @@ import 'package:e_commerce_app/providers/category_provider.dart';
 import 'package:e_commerce_app/providers/product_provider.dart';
 import 'package:e_commerce_app/providers/user_provider.dart';
 import 'package:e_commerce_app/screens/cartpage.dart';
+import 'package:e_commerce_app/screens/checkout_screen.dart';
+import 'package:e_commerce_app/screens/contact_us.dart';
 import 'package:e_commerce_app/screens/list_product.dart';
 import 'package:e_commerce_app/screens/profile_page.dart';
 import 'package:e_commerce_app/services.dart/authService.dart';
@@ -85,7 +87,7 @@ class _HomePageState extends State<HomePage> {
         elevation: 0,
         title: Text('Home Page'),
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.search)),
+          // IconButton(onPressed: () {}, icon: Icon(Icons.search)),
           NotificationButton(),
         ],
       ),
@@ -335,6 +337,11 @@ class _HomePageState extends State<HomePage> {
                   aboutColor = false;
                   cartColor = false;
                   contactColor = false;
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => HomePage(),
+                      ));
                 },
                 selected: homeColor,
                 leading: Icon(Icons.home),
@@ -345,11 +352,11 @@ class _HomePageState extends State<HomePage> {
                   aboutColor = false;
                   cartColor = true;
                   contactColor = false;
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //       builder: (context) => CartPage(),
-                  //     ));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CheckoutPage(),
+                      ));
                 },
                 selected: cartColor,
                 leading: Icon(Icons.shopping_cart),
@@ -370,11 +377,22 @@ class _HomePageState extends State<HomePage> {
                   aboutColor = false;
                   cartColor = false;
                   contactColor = true;
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ContactUsScreem(),
+                      ));
                 },
                 selected: contactColor,
                 leading: Icon(Icons.phone),
                 title: Text('Contact US')),
-            ListTile(leading: Icon(Icons.logout), title: Text('Logout')),
+            ListTile(
+              leading: Icon(Icons.logout),
+              title: Text('Logout'),
+              onTap: () {
+                AuthService().signout();
+              },
+            ),
           ],
         ),
       ),
