@@ -19,6 +19,9 @@ class DetailPage extends StatefulWidget {
 
 class _DetailPageState extends State<DetailPage> {
   int quantity = 1;
+  List<bool> isSizeSelected = [true, false, false, false];
+  List<bool> isColorSelected = [true, false, false, false, false];
+
   @override
   Widget build(BuildContext context) {
     CartProvider cartProvider = Provider.of(context);
@@ -95,15 +98,37 @@ class _DetailPageState extends State<DetailPage> {
               Container(
                 width: MediaQuery.of(context).size.width - 190.w,
                 // color: Colors.blue,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                // child: Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+                //   children: [
+                //     sizeProduct(context, 'S'),
+                //     sizeProduct(context, 'M'),
+                //     sizeProduct(context, 'L'),
+                //     sizeProduct(context, 'XL'),
+                //     sizeProduct(context, 'XXL'),
+                //   ],
+                // ),
+                child: ToggleButtons(
                   children: [
                     sizeProduct(context, 'S'),
                     sizeProduct(context, 'M'),
                     sizeProduct(context, 'L'),
                     sizeProduct(context, 'XL'),
-                    sizeProduct(context, 'XXL'),
                   ],
+                  onPressed: (int index) {
+                    setState(() {
+                      for (int indexButtn = 0;
+                          indexButtn < isSizeSelected.length;
+                          indexButtn++) {
+                        if (indexButtn == index) {
+                          isSizeSelected[indexButtn] = true;
+                        } else {
+                          isSizeSelected[indexButtn] = false;
+                        }
+                      }
+                    });
+                  },
+                  isSelected: isSizeSelected,
                 ),
               ),
               SizedBox(
@@ -119,8 +144,19 @@ class _DetailPageState extends State<DetailPage> {
               Container(
                 width: MediaQuery.of(context).size.width - 220.w,
                 // color: Colors.blue,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                // child: Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+                //   children: [
+                //     colorProduct(context, Colors.red),
+                //     colorProduct(context, Colors.green),
+                //     colorProduct(context, Colors.blue),
+                //     colorProduct(context, Colors.pink),
+                //     colorProduct(context, Colors.yellow),
+                //   ],
+                // ),
+                child: ToggleButtons(
+                  renderBorder: false,
+                  fillColor: Colors.orange[300],
                   children: [
                     colorProduct(context, Colors.red),
                     colorProduct(context, Colors.green),
@@ -128,6 +164,20 @@ class _DetailPageState extends State<DetailPage> {
                     colorProduct(context, Colors.pink),
                     colorProduct(context, Colors.yellow),
                   ],
+                  onPressed: (int index) {
+                    setState(() {
+                      for (int indexButtn = 0;
+                          indexButtn < isColorSelected.length;
+                          indexButtn++) {
+                        if (indexButtn == index) {
+                          isColorSelected[indexButtn] = true;
+                        } else {
+                          isColorSelected[indexButtn] = false;
+                        }
+                      }
+                    });
+                  },
+                  isSelected: isColorSelected,
                 ),
               ),
               SizedBox(

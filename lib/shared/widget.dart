@@ -196,17 +196,17 @@ Widget carouselBuild(AssetImage urlImage, int index) {
 
 Container sizeProduct(BuildContext context, String name) {
   return Container(
-    height: MediaQuery.of(context).size.height - 2180.h,
+    height: MediaQuery.of(context).size.height - 2200.h,
     width: MediaQuery.of(context).size.width - 930.w,
-    color: Colors.grey.shade300,
+    // color: Colors.grey.shade300,
     child: Center(child: Text('$name')),
   );
 }
 
 Container colorProduct(BuildContext context, Color color) {
   return Container(
-    height: MediaQuery.of(context).size.height - 2230.h,
-    width: MediaQuery.of(context).size.width - 960.w,
+    height: MediaQuery.of(context).size.height - 2240.h,
+    width: MediaQuery.of(context).size.width - 980.w,
     color: color,
     // child: Center(child: Text('$name')),
   );
