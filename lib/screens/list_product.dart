@@ -3,6 +3,7 @@ import 'package:e_commerce_app/model/product.dart';
 import 'package:e_commerce_app/providers/product_provider.dart';
 import 'package:e_commerce_app/services/search.dart';
 import 'package:e_commerce_app/shared/widget.dart';
+import 'package:e_commerce_app/shared/widget/notification_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -31,7 +32,7 @@ class _ListProductState extends State<ListProduct> {
                 showSearch(context: context, delegate: Search());
               },
               icon: Icon(Icons.search)),
-          IconButton(onPressed: () {}, icon: Icon(Icons.notifications_none)),
+          NotificationButton(),
         ],
       ),
       body: widget.snapshot == null

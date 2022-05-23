@@ -10,4 +10,18 @@ class NotificationProvider extends ChangeNotifier {
   int get notificationListLength {
     return notificationList.length;
   }
+
+  get getNotificationList {
+    return notificationList;
+  }
+
+  void clearCheckoutList() {
+    notificationList.clear();
+    notifyListeners();
+  }
+
+  void deleteCheckoutProduct(int index) {
+    notificationList.removeAt(index);
+    notifyListeners();
+  }
 }

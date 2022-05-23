@@ -1,4 +1,5 @@
 import 'package:e_commerce_app/providers/cart_provider.dart';
+import 'package:e_commerce_app/providers/notification_provider.dart';
 import 'package:e_commerce_app/providers/user_provider.dart';
 import 'package:e_commerce_app/shared/toast.dart';
 import 'package:e_commerce_app/shared/widget.dart';
@@ -28,6 +29,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
     double discountRupees;
     double shipping = 60;
     CartProvider cartProvider = Provider.of(context);
+    NotificationProvider notificationProvider = Provider.of(context);
 
     cartProvider.cartModelList.forEach((e) {
       subtotal += e.amount + e.quantity;
@@ -91,6 +93,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                   url: cartProvider.getCartModelList[index].url,
                                   isCheckOutPage: true,
                                   index: index,
+                                  color: cartProvider
+                                      .getCartModelList[index].color,
+                                  size:
+                                      cartProvider.getCartModelList[index].size,
                                 );
                               },
                             ),
@@ -135,6 +141,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           'productName': d.name,
                           'productAmount': d.amount,
                           'productQuantity': d.quantity,
+                          'color': d.color,
+                          'size': d.size,
                         })
                     .toList(),
                 'total': total,
@@ -145,6 +153,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
               });
 
               cartProvider.clearCheckoutList();
+              notificationProvider.clearCheckoutList();
             }
           } else {
             print('No item');

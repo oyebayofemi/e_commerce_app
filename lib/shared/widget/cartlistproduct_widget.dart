@@ -1,4 +1,5 @@
 import 'package:e_commerce_app/providers/cart_provider.dart';
+import 'package:e_commerce_app/providers/notification_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -10,13 +11,17 @@ class CartListProductWidget extends StatefulWidget {
   int quantity;
   bool isCheckOutPage;
   int index;
+  String color;
+  String size;
   CartListProductWidget(
       {required this.amount,
       required this.name,
       required this.quantity,
       required this.url,
       required this.isCheckOutPage,
-      required this.index});
+      required this.index,
+      required this.color,
+      required this.size});
 
   @override
   State<CartListProductWidget> createState() => _CartListProductWidgetState();
@@ -27,6 +32,7 @@ class _CartListProductWidgetState extends State<CartListProductWidget> {
   @override
   Widget build(BuildContext context) {
     CartProvider cartProvider = Provider.of<CartProvider>(context);
+    NotificationProvider notificationProvider = Provider.of(context);
 
     return Container(
       height: MediaQuery.of(context).size.height - 1910.h,
@@ -64,7 +70,17 @@ class _CartListProductWidgetState extends State<CartListProductWidget> {
                             ),
                           ],
                         ),
-                        Text('CLoths'),
+                        Container(
+                          width: MediaQuery.of(context).size.width - 600.w,
+                          // color: Colors.blue,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(widget.color),
+                              Text(widget.size),
+                            ],
+                          ),
+                        ),
                         Text(
                           '\$ ${widget.amount}',
                           style: TextStyle(color: Colors.grey[500]),
@@ -140,6 +156,8 @@ class _CartListProductWidgetState extends State<CartListProductWidget> {
                     child: IconButton(
                         onPressed: () {
                           cartProvider.deleteCheckoutProduct(widget.index);
+                          notificationProvider
+                              .deleteCheckoutProduct(widget.index);
                         },
                         icon: Icon(Icons.close)),
                   )

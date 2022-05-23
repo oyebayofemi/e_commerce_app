@@ -20,9 +20,12 @@ class _NotificationButtonState extends State<NotificationButton> {
         bottom: 30,
         top: 3,
       ),
-      badgeContent: Text(
-        notificationProvider.notificationListLength.toString(),
-        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+      badgeColor: Colors.white,
+      badgeContent: Center(
+        child: Text(
+          notificationProvider.notificationListLength.toString(),
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        ),
       ),
       child: IconButton(onPressed: null, icon: Icon(Icons.notifications_none)),
     );

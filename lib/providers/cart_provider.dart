@@ -5,9 +5,15 @@ class CartProvider extends ChangeNotifier {
   List<CartModel> cartModelList = [];
   late CartModel cartModelData;
 
-  void getCartData(String name, String url, int quantity, int amount) {
-    cartModelData =
-        CartModel(name: name, url: url, amount: amount, quantity: quantity);
+  void getCartData(String name, String url, int quantity, int amount,
+      String color, String size) {
+    cartModelData = CartModel(
+        name: name,
+        url: url,
+        amount: amount,
+        quantity: quantity,
+        color: color,
+        size: size);
 
     cartModelList.add(cartModelData);
     // notifyListeners();

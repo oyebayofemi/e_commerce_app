@@ -33,7 +33,7 @@ class _CartPageState extends State<CartPage> {
       ),
       bottomNavigationBar: GestureDetector(
         onTap: () {
-          notificationProvider.addNotification('notification');
+          // notificationProvider.addNotification('notification');
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -67,6 +67,8 @@ class _CartPageState extends State<CartPage> {
                   name: cartProvider.getCartModelList[index].name,
                   quantity: cartProvider.getCartModelList[index].quantity,
                   url: cartProvider.getCartModelList[index].url,
+                  color: cartProvider.getCartModelList[index].color,
+                  size: cartProvider.getCartModelList[index].size,
                   isCheckOutPage: false,
                 );
               },

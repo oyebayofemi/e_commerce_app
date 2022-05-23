@@ -1,4 +1,5 @@
 import 'package:e_commerce_app/providers/cart_provider.dart';
+import 'package:e_commerce_app/providers/notification_provider.dart';
 import 'package:e_commerce_app/screens/cartpage.dart';
 import 'package:e_commerce_app/shared/widget.dart';
 import 'package:e_commerce_app/shared/widget/notification_widget.dart';
@@ -22,9 +23,60 @@ class _DetailPageState extends State<DetailPage> {
   List<bool> isSizeSelected = [true, false, false, false];
   List<bool> isColorSelected = [true, false, false, false, false];
 
+  int mySizeIndex = 0;
+  String size = 'S';
+
+  void getSize() {
+    if (mySizeIndex == 0) {
+      setState(() {
+        size = 'S';
+      });
+    } else if (mySizeIndex == 1) {
+      setState(() {
+        size = 'M';
+      });
+    } else if (mySizeIndex == 2) {
+      setState(() {
+        size = 'L';
+      });
+    } else if (mySizeIndex == 3) {
+      setState(() {
+        size = 'XL';
+      });
+    }
+  }
+
+  int myColorIndex = 0;
+  String color = 'Red';
+
+  void getColor() {
+    if (myColorIndex == 0) {
+      setState(() {
+        color = 'Red';
+      });
+    } else if (myColorIndex == 1) {
+      setState(() {
+        color = 'Green';
+      });
+    } else if (myColorIndex == 2) {
+      setState(() {
+        color = 'Blue';
+      });
+    } else if (myColorIndex == 3) {
+      setState(() {
+        color = 'Pink';
+      });
+    } else if (myColorIndex == 4) {
+      setState(() {
+        color = 'Yellow';
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     CartProvider cartProvider = Provider.of(context);
+    NotificationProvider notificationProvider = Provider.of(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -127,6 +179,10 @@ class _DetailPageState extends State<DetailPage> {
                         }
                       }
                     });
+                    setState(() {
+                      mySizeIndex = index;
+                      // print(mySizeIndex);
+                    });
                   },
                   isSelected: isSizeSelected,
                 ),
@@ -176,6 +232,10 @@ class _DetailPageState extends State<DetailPage> {
                         }
                       }
                     });
+                    setState(() {
+                      myColorIndex = index;
+                      // print(myColorIndex);
+                    });
                   },
                   isSelected: isColorSelected,
                 ),
@@ -199,7 +259,7 @@ class _DetailPageState extends State<DetailPage> {
                         shape: RoundedRectangleBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(50))),
-                        color: Colors.grey.shade200,
+                        color: Colors.orange,
                         onPressed: () {
                           setState(() {
                             quantity--;
@@ -208,19 +268,25 @@ class _DetailPageState extends State<DetailPage> {
                             }
                           });
                         },
-                        child: Text('-')),
+                        child: Text(
+                          '-',
+                          style: TextStyle(color: Colors.white),
+                        )),
                     Text('$quantity'),
                     FlatButton(
                         shape: RoundedRectangleBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(50))),
-                        color: Colors.grey.shade200,
+                        color: Colors.orange,
                         onPressed: () {
                           setState(() {
                             quantity++;
                           });
                         },
-                        child: Text('+')),
+                        child: Text(
+                          '+',
+                          style: TextStyle(color: Colors.white),
+                        )),
                   ],
                 ),
               ),
@@ -236,17 +302,21 @@ class _DetailPageState extends State<DetailPage> {
                 child: FlatButton(
                   color: Colors.orange,
                   onPressed: () async {
+                    getSize();
+                    getColor();
+
+                    cartProvider.getCartData(widget.name, widget.url, quantity,
+                        widget.amount, color, size);
+                    notificationProvider.addNotification('notification');
+
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                           builder: (context) => CartPage(),
                         ));
-
-                    cartProvider.getCartData(
-                        widget.name, widget.url, quantity, widget.amount);
                   },
                   child: Text(
-                    'CHECK OUT',
+                    'Add To Cart',
                     style: TextStyle(
                       color: Colors.white,
                       fontFamily: 'Poppins',
