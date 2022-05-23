@@ -27,7 +27,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   String? phone, name;
   bool edit = false;
-  bool isloading = true;
+  bool isloading = false;
   Uint8List? _image;
   StorageMethods storageMethods = StorageMethods();
   FirebaseFirestore _firestore = FirebaseFirestore.instance;

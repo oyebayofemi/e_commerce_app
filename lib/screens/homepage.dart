@@ -5,6 +5,7 @@ import 'package:e_commerce_app/model/product.dart';
 import 'package:e_commerce_app/providers/category_provider.dart';
 import 'package:e_commerce_app/providers/product_provider.dart';
 import 'package:e_commerce_app/providers/user_provider.dart';
+import 'package:e_commerce_app/screens/about_us.dart';
 import 'package:e_commerce_app/screens/cartpage.dart';
 import 'package:e_commerce_app/screens/checkout_screen.dart';
 import 'package:e_commerce_app/screens/contact_us.dart';
@@ -367,6 +368,11 @@ class _HomePageState extends State<HomePage> {
                   aboutColor = true;
                   cartColor = false;
                   contactColor = false;
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AboutUs(),
+                      ));
                 },
                 selected: aboutColor,
                 leading: Icon(Icons.info),

@@ -287,3 +287,24 @@ InputDecoration profileTextFormDecoration() {
           borderSide: BorderSide(color: Colors.orange)),
       focusColor: Colors.green[100]);
 }
+
+Card aboutText(BuildContext context, String title, String text) {
+  return Card(
+    child: Column(
+      children: [
+        Container(
+            // color: Colors.green,
+            height: MediaQuery.of(context).size.height - 2170.h,
+            alignment: Alignment.center,
+            child: Text(
+              title,
+              style: authText().copyWith(fontSize: 50.sp, color: Colors.orange),
+            )),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+          child: Text(text),
+        )
+      ],
+    ),
+  );
+}
